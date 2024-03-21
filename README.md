@@ -5,5 +5,6 @@
 ```shell
 docker run --rm -p 3000:3000 -v `pwd`:/app -w /app -it node:21-bookworm-slim /bin/bash
 # in container
+npm install --force
 npm start
 ```
