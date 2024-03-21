@@ -1,28 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ChatOpenAI } from "@langchain/openai";
-import { BufferMemory } from "langchain/memory";
-import { ConversationChain } from "langchain/chains";
 
+import Model from './model.js';
 import './mentat.css';
 
 const Mentat = () => {
-    const initModel = APIKey => {
-        // Your script logic here
-        const model = new ChatOpenAI({
-            openAIApiKey: APIKey,
-        });
-        const memory = new BufferMemory();
-        const chain = new ConversationChain({ llm: model, memory: memory });
-
-        window.mtt_invoke = (prompt, callback) => {
-            chain.call({ input: prompt }).then(result => {
-                callback(result.response);
-            })
-        }
-
-        window.mtt_memory = memory;
-    }
-
     const [APIKey, setAPIKey] = useState('');
     const [chatEnabled, setChatEnabled] = useState(false);
     const [message, setMessage] = useState('');
@@ -43,7 +24,7 @@ const Mentat = () => {
     const handleStartChatting = () => {
         // Perform API key validation here if needed
         if (APIKey.trim() !== '') {
-            initModel(APIKey);
+            window.model = new Model(APIKey);
             setChatEnabled(true);
         } else {
             alert('Please enter a valid API key.');
@@ -67,7 +48,7 @@ const Mentat = () => {
             setChatHistory([...chatHistory, M(message)]);
             setMessage('');
 
-            window.mtt_invoke(message, response => {
+            window.model.call(message, response => {
                 setChatHistory([...chatHistory, M(message), M(response)]);
             })
         }
