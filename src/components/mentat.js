@@ -1,9 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import Model from './model.js';
+import DB from './indexedDB.js';
+import { History } from './memory.js';
 import './mentat.css';
 
 const Mentat = () => {
+    window.db = DB;
+    window.chatHistory = new History(DB);
+
     const [APIKey, setAPIKey] = useState('');
     const [chatEnabled, setChatEnabled] = useState(false);
     const [message, setMessage] = useState('');
@@ -24,7 +29,7 @@ const Mentat = () => {
     const handleStartChatting = () => {
         // Perform API key validation here if needed
         if (APIKey.trim() !== '') {
-            window.model = new Model(APIKey);
+            window.model = new Model(APIKey, DB);
             setChatEnabled(true);
         } else {
             alert('Please enter a valid API key.');
@@ -35,22 +40,17 @@ const Mentat = () => {
         setMessage(event.target.value);
     };
 
-    const M = message => {
-        return {
-            id: Math.floor(Math.random() * 1000000),
-            ts: new Date().getTime(),
-            text: message,
-        }
-    }
-
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (message.trim() !== '') {
-            setChatHistory([...chatHistory, M(message)]);
+            const userMsg = window.chatHistory.createMessage(window.model.metadata, 'Human', message);
+            window.chatHistory.put(userMsg)
+            setChatHistory([...chatHistory, userMsg]);
             setMessage('');
 
-            window.model.call(message, response => {
-                setChatHistory([...chatHistory, M(message), M(response)]);
-            })
+            const response = await window.model.call(message);
+            const aiMsg = window.chatHistory.createMessage(window.model.metadata, 'AI', response);
+            window.chatHistory.put(aiMsg);
+            setChatHistory([...chatHistory, userMsg, aiMsg]);
         }
     };
 
@@ -79,7 +79,7 @@ const Mentat = () => {
                     <div ref={chatHistoryRef} className="chat-history">
                         {chatHistory.map((message) => (
                             <div key={message.id} className="message">
-                                {message.text}
+                                {message.content}
                             </div>
                         ))}
                     </div>
