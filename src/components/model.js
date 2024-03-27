@@ -1,4 +1,5 @@
 import { ChatOpenAI } from "@langchain/openai";
+import { ChatAnthropic } from "@langchain/anthropic";
 import { ConversationChain } from "langchain/chains";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -17,6 +18,8 @@ class Model {
         // Base model from provider
         if (provider === "openai") {
             this.model = new ChatOpenAI({ openAIApiKey: APIKey });
+        } else if (provider === "anthropic") {
+            this.model = new ChatAnthropic({ anthropicApiKey: APIKey });
         } else {
             throw new Error(`provider ${provider} not supported`);
         }

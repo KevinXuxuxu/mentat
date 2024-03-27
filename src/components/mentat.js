@@ -10,6 +10,7 @@ const Mentat = () => {
     window.chatHistory = new History(DB);
 
     const [APIKey, setAPIKey] = useState('');
+    const [modelProvider, setModelProvider] = useState('openai');
     const [chatEnabled, setChatEnabled] = useState(false);
     const [message, setMessage] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
@@ -29,11 +30,15 @@ const Mentat = () => {
     const handleStartChatting = () => {
         // Perform API key validation here if needed
         if (APIKey.trim() !== '') {
-            window.model = new Model(APIKey, DB);
+            window.model = new Model(APIKey, DB, 'buffer', modelProvider);
             setChatEnabled(true);
         } else {
             alert('Please enter a valid API key.');
         }
+    };
+
+    const handleModelProviderChange = (event) => {
+        setModelProvider(event.target.value);
     };
 
     const handleInputChange = (event) => {
@@ -60,6 +65,8 @@ const Mentat = () => {
         }
     };
 
+    let AKIKeyPlaceholder = modelProvider + " API key...";
+
     return (
         <div className="chat-container">
             {!chatEnabled && (
@@ -68,9 +75,17 @@ const Mentat = () => {
                         type="text"
                         value={APIKey}
                         onChange={handleAPIKeyChange}
-                        placeholder="OpenAI API Key..."
+                        placeholder={AKIKeyPlaceholder}
                         className="message-input"
                     />
+                    <select
+                        value={modelProvider}
+                        onChange={handleModelProviderChange}
+                        className="provider-select"
+                    >
+                        <option value="openai">OpenAI</option>
+                        <option value="anthropic">Anthropic</option>
+                    </select>
                     <button onClick={handleStartChatting}>Start Chat!</button>
                 </div>
             )}
