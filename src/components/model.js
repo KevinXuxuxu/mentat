@@ -1,10 +1,19 @@
 import { ChatOpenAI } from "@langchain/openai";
-import { BufferMemory } from "langchain/memory";
 import { ConversationChain } from "langchain/chains";
+
+import { v4 as uuidv4 } from 'uuid';
+import { MTTBufferMemory } from "./memory";
 
 class Model {
 
-    constructor(APIKey, memory = "buffer", provider = "openai") {
+    constructor(APIKey, db, memory = "buffer", provider = "openai") {
+        // Create metadata
+        this.metadata = {
+            provider: provider,
+            sid: uuidv4(),
+            ts: new Date()
+        }
+
         // Base model from provider
         if (provider === "openai") {
             this.model = new ChatOpenAI({ openAIApiKey: APIKey });
@@ -14,7 +23,7 @@ class Model {
 
         // Prepare memory
         if (memory === "buffer") {
-            this.memory = new BufferMemory();
+            this.memory = new MTTBufferMemory(db, this.metadata);
         } else {
             throw new Error(`memory type ${memory} not supported`);
         }
@@ -23,10 +32,12 @@ class Model {
         this.chain = new ConversationChain({ llm: this.model, memory: this.memory })
     }
 
-    call(prompt, callback) {
-        this.chain.call({ input: prompt }).then(result => {
-            callback(result.response);
-        })
+    async call(prompt) {
+        return new Promise((resolve, _) => {
+            this.chain.call({ input: prompt }).then(result => {
+                resolve(result.response);
+            })
+        });
     }
 }
 
