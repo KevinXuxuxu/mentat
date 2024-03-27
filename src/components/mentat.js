@@ -115,13 +115,14 @@ const Mentat = () => {
                         </button>
                     </div>
                     <div className="model-switch-container">
-                        <input
-                            type="text"
+                        <select
                             value={modelName}
                             onChange={handleModelNameChange}
-                            placeholder="New Model Name..."
-                            className="message-input"
-                        />
+                            className="model-select"
+                        >
+                            <option value="gpt-3.5-turbo-1106">GPT-3.5 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                        </select>
                         <button onClick={handleSwitchModel} className="switch-button">
                             Switch Model
                         </button>
