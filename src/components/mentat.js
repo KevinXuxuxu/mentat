@@ -10,6 +10,7 @@ const Mentat = () => {
     window.chatHistory = new History(DB);
 
     const [APIKey, setAPIKey] = useState('');
+    const [modelName, setModelName] = useState('gpt-3.5-turbo-1106');
     const [chatEnabled, setChatEnabled] = useState(false);
     const [message, setMessage] = useState('');
     const [chatHistory, setChatHistory] = useState([]);
@@ -26,15 +27,31 @@ const Mentat = () => {
         setAPIKey(event.target.value);
     }
 
+    // Handler for modelName change
+    const handleModelNameChange = (event) => {
+        setModelName(event.target.value);
+    };
+
+    // Updated handleStartChatting function
     const handleStartChatting = () => {
-        // Perform API key validation here if needed
         if (APIKey.trim() !== '') {
-            window.model = new Model(APIKey, DB);
+            window.model = new Model(APIKey, DB, modelName); // Pass modelName to Model
             setChatEnabled(true);
         } else {
-            alert('Please enter a valid API key.');
+            alert('Please enter a valid API key');
         }
     };
+
+    const handleSwitchModel = () => {
+        if (modelName.trim() !== '') {
+            const previousMemory = window.model.memory; // Retrieve previous memory
+            window.model = new Model(APIKey, DB, modelName, previousMemory); // Update the model
+            alert('Model switched successfully!');
+        } else {
+            alert('Please enter a valid model name.');
+        }
+    };
+
 
     const handleInputChange = (event) => {
         setMessage(event.target.value);
@@ -94,6 +111,19 @@ const Mentat = () => {
                         />
                         <button onClick={handleSendMessage} className="send-button">
                             Send
+                        </button>
+                    </div>
+                    <div className="model-switch-container">
+                        <select
+                            value={modelName}
+                            onChange={handleModelNameChange}
+                            className="model-select"
+                        >
+                            <option value="gpt-3.5-turbo-1106">GPT-3.5 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                        </select>
+                        <button onClick={handleSwitchModel} className="switch-button">
+                            Switch Model
                         </button>
                     </div>
                 </div>

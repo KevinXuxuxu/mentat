@@ -6,30 +6,35 @@ import { MTTBufferMemory } from "./memory";
 
 class Model {
 
-    constructor(APIKey, db, memory = "buffer", provider = "openai") {
+    constructor(APIKey, db, modelName, memory = null, memoryType = "buffer", provider = "openai") {
         // Create metadata
         this.metadata = {
             provider: provider,
+            modelName: modelName,
             sid: uuidv4(),
             ts: new Date()
         }
 
         // Base model from provider
         if (provider === "openai") {
-            this.model = new ChatOpenAI({ openAIApiKey: APIKey });
+            this.model = new ChatOpenAI({ openAIApiKey: APIKey, modelName: modelName });
         } else {
             throw new Error(`provider ${provider} not supported`);
         }
 
         // Prepare memory
-        if (memory === "buffer") {
-            this.memory = new MTTBufferMemory(db, this.metadata);
+        if (memory == null) {
+            this.memory = memory; // Use existing memory if provided
         } else {
-            throw new Error(`memory type ${memory} not supported`);
+            if (memoryType === "buffer") {
+                this.memory = new MTTBufferMemory(db, this.metadata); // Create new memory otherwise
+            } else {
+                throw new Error(`memory type ${memory} not supported`);
+            }
         }
 
         // Chain
-        this.chain = new ConversationChain({ llm: this.model, memory: this.memory })
+        this.chain = new ConversationChain({ llm: this.model, memory: this.memory });
     }
 
     async call(prompt) {
