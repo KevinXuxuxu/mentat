@@ -23,7 +23,7 @@ class Model {
         }
 
         // Prepare memory
-        if (memory) {
+        if (memory == null) {
             this.memory = memory; // Use existing memory if provided
         } else {
             if (memoryType === "buffer") {

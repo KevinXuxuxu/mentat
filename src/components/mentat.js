@@ -34,17 +34,16 @@ const Mentat = () => {
 
     // Updated handleStartChatting function
     const handleStartChatting = () => {
-        if (APIKey.trim() !== '' && modelName.trim() !== '') {
+        if (APIKey.trim() !== '') {
             window.model = new Model(APIKey, DB, modelName); // Pass modelName to Model
             setChatEnabled(true);
         } else {
-            alert('Please enter a valid API key and model name.');
+            alert('Please enter a valid API key');
         }
     };
 
     const handleSwitchModel = () => {
         if (modelName.trim() !== '') {
-            // We want to be able to persist previous chat history
             const previousMemory = window.model.memory; // Retrieve previous memory
             window.model = new Model(APIKey, DB, modelName, previousMemory); // Update the model
             alert('Model switched successfully!');
