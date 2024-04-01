@@ -1,4 +1,4 @@
-import { BufferMemory } from "langchain/memory";
+import { BufferMemory, ConversationSummaryBufferMemory } from "langchain/memory";
 import { v4 as uuidv4 } from 'uuid';
 
 class History {
@@ -43,4 +43,25 @@ class MTTBufferMemory extends BufferMemory {
     }
 }
 
-export { History, MTTBufferMemory, };
+class MTTConversationSummaryBufferMemory extends ConversationSummaryBufferMemory {
+    constructor(memoryParams, db, metadata) {
+        super(memoryParams);
+        // DB connection for local data persistence.
+        this.db = db;
+        this.metadata = metadata;
+    }
+
+    persist() {
+        if (this.db == null) {
+            return;
+        }
+        this.db.object('buffer').put({
+            sid: this.metadata.sid,
+            provider: this.metadata.provider,
+            ts: this.metadata.ts,
+            messages: this.chatHistory.messages
+        })
+    }
+}
+
+export { History, MTTBufferMemory, MTTConversationSummaryBufferMemory };
