@@ -1,0 +1,153 @@
+.slide {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.slide .div-2 {
+  background-color: #ffffff;
+  height: 745px;
+  position: relative;
+  width: 1482px;
+}
+
+.slide .sidebar-instance {
+  height: 745px !important;
+  left: 0 !important;
+  position: absolute !important;
+  top: 0 !important;
+}
+
+.slide .design-component-instance-node {
+  position: relative !important;
+}
+
+.slide .checkbox-3-instance {
+  height: 24px !important;
+  position: relative !important;
+  width: 24px !important;
+}
+
+.slide .main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 745px;
+  justify-content: space-between;
+  left: 515px;
+  padding: 0px 150px 9px;
+  position: absolute;
+  top: 0;
+  width: 834px;
+}
+
+.slide .chat-history {
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 800px;
+  min-width: 254px;
+  position: relative;
+  width: 100%;
+}
+
+.slide .section {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 0px;
+  position: relative;
+  width: 100%;
+}
+
+.slide .section-2 {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+}
+
+.slide .avatar {
+  height: 27px;
+  position: relative;
+  width: 24px;
+}
+
+.slide .unnamed {
+  height: 24px;
+  left: 0;
+  position: absolute;
+  top: 1px;
+  width: 24px;
+}
+
+.slide .section-3 {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 24px;
+  position: relative;
+}
+
+.slide .text-wrapper-5 {
+  color: #000000;
+  font-family: "Inter", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  height: 27px;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: -1px;
+  position: relative;
+  text-align: right;
+  width: 109px;
+}
+
+.slide .design-development {
+  align-self: stretch;
+  color: #000000;
+  font-family: "Inter", Helvetica;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+}
+
+.slide .prompt {
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 800px;
+  position: relative;
+  width: 100%;
+}
+
+.slide .input-instance {
+  align-self: stretch !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+}
+
+.slide .navbar-instance {
+  left: 1382px !important;
+  padding: 24px 40px !important;
+  position: absolute !important;
+  top: 0 !important;
+}
