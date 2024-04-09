@@ -1,8 +1,8 @@
 .navbar {
   -webkit-backdrop-filter: blur(10px) brightness(100%);
   align-items: center;
-  backdrop-filter: blur(10px) brightness(100%);
-  background-color: #ffffff4c;
+  /* backdrop-filter: blur(10px) brightness(100%);
+  background-color: #ffffff4c; */
   display: flex;
   gap: 583px;
   justify-content: space-around;

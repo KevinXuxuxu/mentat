@@ -188,3 +188,16 @@
 .input.state-filled .send-a-message {
   color: #000000;
 }
+
+.input-case input {
+  border: none;
+  outline: none;
+  /* Removes the outline when the input is focused */
+  box-shadow: none;
+  /* Removes any box shadow */
+  border-radius: 0;
+}
+
+.input-case input:focus {
+  border: none;
+}

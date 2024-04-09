@@ -1,12 +1,63 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Checkbox } from "../../components/Checkbox";
+import { Section } from "../../components/Section";
 import { Input } from "../../components/Input";
 import { Navbar } from "../../components/Navbar";
 import { Sidebar } from "../../components/Sidebar";
 import { CheckYes } from "../../icons/CheckYes";
+import Model from "../../components/backend/model.js";
+import DB from '../../components/backend/indexedDB.js';
+import { History } from '../../components/backend/memory.js';
 import "./style.css";
 
 export const Slide = () => {
+  window.db = DB;
+  window.chatHistory = new History(DB);
+
+  const [inputState, setInputState] = useState("default");
+  const [message, setMessage] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);
+  const promptRef = useRef(null);
+  const chatHistoryRef = useRef(null);
+
+  const handleInputChange = (event) => {
+    setMessage(event.target.value);
+  }
+
+  const handleSendMessage = async () => {
+    if (message.trim() !== '') {
+      const userMsg = window.chatHistory.createMessage(window.model.metadata, 'Human', message);
+      window.chatHistory.put(userMsg);
+      setChatHistory([...chatHistory, userMsg]);
+      setMessage('');
+      
+      const response = await window.model.call(message);
+      const aiMsg = window.chatHistory.createMessage(window.model.metadata, 'AI', response);
+      window.chatHistory.put(aiMsg);
+      setChatHistory([...chatHistory, userMsg, aiMsg]);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && inputState === "active") {
+      handleSendMessage();
+    }
+  };
+
+  useEffect(() => {
+    if (window.model == null) {
+      window.model = new Model("API_KEY", null, 'gpt-3.5-turbo-1106');
+    }
+    if (promptRef.current && inputState === "default") {
+      promptRef.current.addEventListener("click", () => {
+        setInputState("active");
+      });
+    }
+    if (inputState === "active") {
+      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+    }
+  }, [inputState, chatHistory])
+
   return (
     <div className="slide">
       <div className="div-2">
@@ -21,31 +72,22 @@ export const Slide = () => {
           property1="default"
         />
         <div className="main">
-          <div className="chat-history">
-            <div className="section">
-              <div className="section-2">
-                <div className="avatar">
-                  <img
-                    className="unnamed"
-                    alt="Unnamed"
-                    src="https://c.animaapp.com/ashz4gW2/img/unnamed-932w7rr4f-transformed-1@2x.png"
-                  />
-                </div>
-                <div className="section-3">
-                  <div className="text-wrapper-5">2.03 PM, 15 Nov</div>
-                  <p className="design-development">
-                    Design development, UX/UI, and product design are all related terms in the field of design, but they
-                    refer to slightly different aspects of the design process.
-                    <br />
-                    <br />
-                    Design development refers...
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div ref={chatHistoryRef} className="chat-history">
+            {chatHistory.map((m) => (
+              <Section message={m.content} role={m.role}/>
+            ))}
           </div>
-          <div className="prompt">
-            <Input className="input-instance" description={false} state="active" visible={false} />
+          <div ref={promptRef} className="prompt">
+            <Input
+              className="input-instance"
+              description={false}
+              state={inputState}
+              visible={false}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              onSend={handleSendMessage}
+              value={message}
+            />
           </div>
         </div>
         <Navbar className="navbar-instance" property1="default" />

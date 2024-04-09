@@ -4,17 +4,18 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  height: 100%;
 }
 
 .slide .div-2 {
   background-color: #ffffff;
-  height: 745px;
+  height: 100%;
   position: relative;
-  width: 1482px;
+  width: 100%;
 }
 
 .slide .sidebar-instance {
-  height: 745px !important;
+  height: 100% !important;
   left: 0 !important;
   position: absolute !important;
   top: 0 !important;
@@ -34,120 +35,56 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 745px;
+  height: 100%;
   justify-content: space-between;
-  left: 515px;
-  padding: 0px 150px 9px;
+  left: 482px;
+  padding: 0px 0px 9px;
   position: absolute;
   top: 0;
-  width: 834px;
+  width: calc(100% - 482px);
 }
 
 .slide .chat-history {
   align-items: center;
-  align-self: stretch;
+  align-self: center;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
   gap: 8px;
-  max-width: 800px;
+  /* max-width: 800px; */
   min-width: 254px;
   position: relative;
   width: 100%;
-}
-
-.slide .section {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 10px;
-  padding: 24px 0px;
-  position: relative;
-  width: 100%;
-}
-
-.slide .section-2 {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  gap: 16px;
-  position: relative;
-  width: 100%;
-}
-
-.slide .avatar {
-  height: 27px;
-  position: relative;
-  width: 24px;
-}
-
-.slide .unnamed {
-  height: 24px;
-  left: 0;
-  position: absolute;
-  top: 1px;
-  width: 24px;
-}
-
-.slide .section-3 {
-  align-items: flex-start;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 24px;
-  position: relative;
-}
-
-.slide .text-wrapper-5 {
-  color: #000000;
-  font-family: "Inter", Helvetica;
-  font-size: 14px;
-  font-weight: 400;
-  height: 27px;
-  letter-spacing: 0;
-  line-height: normal;
-  margin-top: -1px;
-  position: relative;
-  text-align: right;
-  width: 109px;
-}
-
-.slide .design-development {
-  align-self: stretch;
-  color: #000000;
-  font-family: "Inter", Helvetica;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: normal;
-  position: relative;
+  overflow-y: auto;
+  padding: 0px 150px 9px;
+  height: calc(100% - 89px);
 }
 
 .slide .prompt {
   align-items: center;
-  align-self: stretch;
+  align-self: center;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
   gap: 12px;
-  max-width: 800px;
   position: relative;
+  padding: 20px 150px 5px;
   width: 100%;
+  height: 89px;
 }
 
 .slide .input-instance {
-  align-self: stretch !important;
+  max-width: 800px;
+  align-self: center !important;
   flex: 0 0 auto !important;
   width: 100% !important;
 }
 
 .slide .navbar-instance {
-  left: 1382px !important;
-  padding: 24px 40px !important;
-  position: absolute !important;
+  /* left: 1382px !important; */
+  /* padding: 24px 40px !important; */
+  /* position: absolute !important; */
   top: 0 !important;
+  margin-left: auto;
+  margin-right: 30px;
 }
