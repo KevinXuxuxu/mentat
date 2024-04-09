@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Checkbox } from "../../components/Checkbox";
-import { Section } from "../../components/Section";
-import { Input } from "../../components/Input";
-import { Navbar } from "../../components/Navbar";
-import { Sidebar } from "../../components/Sidebar";
-import { CheckYes } from "../../icons/CheckYes";
-import Model from "../../components/backend/model.js";
-import DB from '../../components/backend/indexedDB.js';
-import { History } from '../../components/backend/memory.js';
+import { Checkbox } from "./components/Checkbox/index.js";
+import { Section } from "./components/Section/index.js";
+import { Input } from "./components/Input/index.js";
+import { Navbar } from "./components/Navbar/index.js";
+import { Sidebar } from "./components/Sidebar/index.js";
+import { CheckYes } from "./icons/CheckYes/index.js";
+import Model from "./components/backend/model.js";
+import DB from './components/backend/indexedDB.js';
+import { History } from './components/backend/memory.js';
 import "./style.css";
 
-export const Slide = () => {
+export const Mentat = () => {
   window.db = DB;
   window.chatHistory = new History(DB);
 
