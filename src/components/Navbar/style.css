@@ -1,0 +1,63 @@
+.navbar {
+  -webkit-backdrop-filter: blur(10px) brightness(100%);
+  align-items: center;
+  /* backdrop-filter: blur(10px) brightness(100%);
+  background-color: #ffffff4c; */
+  display: flex;
+  gap: 583px;
+  justify-content: space-around;
+  padding: 22px 40px;
+  position: relative;
+  width: 100px;
+}
+
+.navbar .frame-6 {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  margin-left: -25px;
+  margin-right: -25px;
+  position: relative;
+}
+
+.navbar .frame-parameters {
+  align-items: center;
+  background-color: #efefef;
+  border-radius: 17px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 9px;
+  position: relative;
+}
+
+.navbar .vuesax-linear {
+  height: 16px !important;
+  position: relative !important;
+  width: 16px !important;
+}
+
+.navbar .frame-account {
+  background-color: #000000;
+  border-radius: 4px;
+  height: 28px;
+  overflow: hidden;
+  position: relative;
+  width: 28px;
+}
+
+.navbar .text-wrapper-4 {
+  color: #ffffff;
+  font-family: "Inter", Helvetica;
+  font-size: 14px;
+  font-weight: 500;
+  height: 17px;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 4px;
+  width: 28px;
+}

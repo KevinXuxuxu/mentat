@@ -1,0 +1,72 @@
+.slide .section {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px 0px;
+    position: relative;
+    max-width: 800px;
+    align-self: center;
+    width: 100%;
+}
+
+.slide .section-2 {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 16px;
+    position: relative;
+    width: 100%;
+}
+
+.slide .avatar {
+    height: 27px;
+    position: relative;
+    width: 24px;
+}
+
+.slide .unnamed {
+    height: 24px;
+    left: 0;
+    position: absolute;
+    top: 1px;
+    width: 24px;
+}
+
+.slide .section-3 {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 24px;
+    position: relative;
+}
+
+.slide .text-wrapper-5 {
+    color: #000000;
+    font-family: "Inter", Helvetica;
+    font-size: 14px;
+    font-weight: 400;
+    height: 27px;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    text-align: right;
+    width: 109px;
+}
+
+.slide .design-development {
+    align-self: stretch;
+    color: #000000;
+    font-family: "Inter", Helvetica;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    position: relative;
+}
