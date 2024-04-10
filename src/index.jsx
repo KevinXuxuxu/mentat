@@ -2,8 +2,8 @@ import "../global.css";
 import "../styleguide.css";
 import React from "react";
 import ReactDOMClient from "react-dom/client";
-import { Slide } from "./screens/Slide";
+import { Mentat } from "./mentat.jsx";
 
 const app = document.getElementById("app");
 const root = ReactDOMClient.createRoot(app);
-root.render(<Slide />);
+root.render(<Mentat />);
