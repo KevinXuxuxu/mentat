@@ -7,6 +7,7 @@ import { History } from './components/backend/memory.js';
 import { Message } from "./components/message/Message.jsx";
 import { Input } from "./components/Input/Input.jsx";
 import { ModelConfig } from "./components/modelConfig/ModelConfig.jsx";
+import { TransformerJsEmbedder} from './components/backend/embedding.js';
 
 function Mentat() {
   const [chatEnabled, setChatEnabled] = useState(false);
@@ -70,6 +71,10 @@ function Mentat() {
       window.db = IndexedDB;
       window.chatHistory = new History(IndexedDB);
       window.initialized = true;
+    }
+    if (window.embedder == null) {
+      // https://huggingface.co/Xenova/bge-base-en-v1.5
+      window.embedder = new TransformerJsEmbedder('Xenova/bge-base-en-v1.5');
     }
     if (chatEnabled) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
