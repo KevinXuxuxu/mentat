@@ -1,6 +1,7 @@
 class IndexedDBConn {
     constructor() {
-        const request = indexedDB.open('mentatDB', 4);
+        // Bump up version if indexedDB schema has changed
+        const request = indexedDB.open('mentatDB', 6);
 
         request.onupgradeneeded = event => {
             const db = event.target.result;
@@ -15,7 +16,14 @@ class IndexedDBConn {
             historyObjectStore.createIndex('provider', 'provider', { unique: false });
             historyObjectStore.createIndex('role', 'role', { unique: false });
 
-            // Buffer memory
+            // Chat history vectorDB
+            // Schema: (uuid, id, vector)
+            if (db.objectStoreNames.contains('embedding')) {
+                db.deleteObjectStore('embedding');
+            }
+            const vectorObjectStore = db.createObjectStore('embedding', {keyPath: 'uuid'});
+
+            // Buffer memory (not used)
             // Schema: (sid, provider, ts, messages), one object is one chat session.
             if (db.objectStoreNames.contains('buffer')) {
                 db.deleteObjectStore('buffer');
@@ -45,6 +53,16 @@ class ObjectStore {
         this.o = objectStore;
     }
 
+    async get(value) {
+        const request = this.o.get(value);
+        return new Promise((resolve, _) => {
+            request.onsuccess = event => {
+                const result = event.target.result;
+                resolve(result);
+            };
+        })
+    }
+
     async getBy(indexName, value) {
         const index = this.o.index(indexName);
         const request = index.get(value);
@@ -67,10 +85,25 @@ class ObjectStore {
         });
     }
 
+    async getAll() {
+        return new Promise((resolve, _) => {
+            var rows = [];
+            this.o.openCursor().onsuccess = (event) => {
+                var cursor = event.target.result;
+                if (cursor) {
+                    rows.push(cursor.value);
+                    cursor.continue();
+                } else {
+                    resolve(rows);
+                }
+            }
+        });
+    }
+
     put(row) {
         this.o.put(row);
     }
 }
 
-const DB = new IndexedDBConn();
-export default DB;
+const IndexedDB = new IndexedDBConn();
+export default IndexedDB;
