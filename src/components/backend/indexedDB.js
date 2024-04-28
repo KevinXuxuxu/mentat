@@ -1,8 +1,11 @@
 class IndexedDBConn {
     constructor() {
+        this.resolve = null;
+        this.ready = new Promise((resolve, _) => {
+            this.resolve = resolve;
+        });
         // Bump up version if indexedDB schema has changed
         const request = indexedDB.open('mentatDB', 6);
-
         request.onupgradeneeded = event => {
             const db = event.target.result;
 
@@ -34,6 +37,7 @@ class IndexedDBConn {
 
         request.onsuccess = event => {
             this.db = event.target.result;
+            this.resolve(true);
         };
 
         request.onerror = event => {

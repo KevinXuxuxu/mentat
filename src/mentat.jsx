@@ -54,13 +54,11 @@ export const Mentat = () => {
       window.db = IndexedDB;
       window.chatHistory = new History(IndexedDB);
       window.vectorDB = new VectorDB(window.db, "api_key");
-      window.model = new Model("api_key", null, 'gpt-4-turbo-2024-04-09');
-      window.initialized = true;
-    }
-    window.initVectorDB = () => {
-      window.vectorDB.constructFromIndexDBVector().then(_ => {
+      window.vectorDB.constructFromVectors().then(_ => {
         console.log("vector db initialized");
       });
+      window.model = new Model("api_key", null, 'gpt-4-turbo-2024-04-09');
+      window.initialized = true;
     }
     if (promptRef.current && inputState === "default") {
       promptRef.current.addEventListener("click", () => {
