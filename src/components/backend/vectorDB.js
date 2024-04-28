@@ -23,6 +23,7 @@ class VectorDB {
 
     async constructFromVectors() {
         this.db = new MemoryVectorStore(this.embeddings);
+        await this.indexedDB.ready;
         const vectorObjs = await this.indexedDB.object("embedding").getAll();
         const vectors = vectorObjs.map(v => v.vector);
         const documents = vectorObjs.map(v => {
