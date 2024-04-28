@@ -6,7 +6,10 @@ import { MTTBufferMemory, MTTConversationSummaryBufferMemory } from "./memory";
 
 class Model {
 
-    constructor(APIKey, db, modelName, memory = null, memoryType = "summary_buffer", maxTokenLimit = 3000, provider = "openai") {
+    constructor(APIKey, db, modelName, memory = null,  
+        memoryType = "summary_buffer", 
+        maxTokenLimit = 3000, 
+        provider = "openai") {
         // Create metadata
         this.metadata = {
             provider: provider,

@@ -60,7 +60,8 @@ class MTTConversationSummaryBufferMemory extends ConversationSummaryBufferMemory
             provider: this.metadata.provider,
             ts: this.metadata.ts,
             messages: this.chatHistory.messages
-        })
+        });
+        
     }
 }
 
