@@ -1,1 +1,0 @@
-export { Mentat } from "./mentat";

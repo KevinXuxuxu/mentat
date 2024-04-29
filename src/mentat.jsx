@@ -1,21 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Checkbox } from "./components/Checkbox/index.js";
-import { Section } from "./components/Section/index.js";
-import { Input } from "./components/Input/index.js";
-import { Navbar } from "./components/Navbar/index.js";
-import { Sidebar } from "./components/Sidebar/index.js";
-import { CheckYes } from "./icons/CheckYes/index.js";
+import './Mentat.css';
 import Model from "./components/backend/model.js";
 import IndexedDB from './components/backend/indexedDB.js';
 import VectorDB from './components/backend/vectorDB.js';
 import { History } from './components/backend/memory.js';
-import "./style.css";
+import { Message } from "./components/message/Message.jsx";
+import { Input } from "./components/input/Input.jsx";
+import { ModelConfig } from "./components/modelConfig/ModelConfig.jsx";
 
-export const Mentat = () => {
-  const [inputState, setInputState] = useState("default");
+function Mentat() {
+  const [chatEnabled, setChatEnabled] = useState(false);
   const [message, setMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState([]);
-  const promptRef = useRef(null);
+  const [messageObjs, setMessageObjs] = useState([]);
+  const [APIKey, setAPIKey] = useState('');
   const chatHistoryRef = useRef(null);
 
   const handleInputChange = (event) => {
@@ -32,78 +29,62 @@ export const Mentat = () => {
   const handleSendMessage = async () => {
     if (message.trim() !== '') {
       const userMessageObj = persistMessage(window.model.metadata, 'Human', message);
-      setChatHistory([...chatHistory, userMessageObj]);
+      setMessageObjs([...messageObjs, userMessageObj]);
       setMessage('');
-      
+
       const response = await window.model.call(message);
       const aiMessageObj = persistMessage(window.model.metadata, 'AI', response);
-      setChatHistory([...chatHistory, userMessageObj, aiMessageObj]);
+      setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
     }
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter' && inputState === "active") {
+    if (event.key === 'Enter' && chatEnabled) {
       handleSendMessage();
     }
   };
 
-  // OpenAI model name: gpt-3.5-turbo-1106, gpt-4-turbo-2024-04-09
-  useEffect(() => {
+  const handleAPIKeyChange = (event) => {
+    setAPIKey(event.target.value);
+  }
 
+  const handleAPIKeySave = () => {
+    window.vectorDB = new VectorDB(window.db, APIKey);
+    window.vectorDB.constructFromVectors().then(_ => {
+      console.log("vector db initialized");
+    });
+    // OpenAI model name: gpt-3.5-turbo-1106, gpt-4-turbo-2024-04-09
+    window.model = new Model(APIKey, null, 'gpt-4-turbo-2024-04-09');
+    setChatEnabled(true);
+  }
+
+  useEffect(() => {
     if (!window.initialized) {
+      // document.documentElement.setAttribute('data-theme', 'synthwave');
       window.db = IndexedDB;
       window.chatHistory = new History(IndexedDB);
-      window.vectorDB = new VectorDB(window.db, "api_key");
-      window.vectorDB.constructFromVectors().then(_ => {
-        console.log("vector db initialized");
-      });
-      window.model = new Model("api_key", null, 'gpt-4-turbo-2024-04-09');
       window.initialized = true;
     }
-    if (promptRef.current && inputState === "default") {
-      promptRef.current.addEventListener("click", () => {
-        setInputState("active");
-      });
-    }
-    if (inputState === "active") {
+    if (chatEnabled) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }
-  }, [inputState, chatHistory])
+  }, [chatEnabled, messageObjs])
 
   return (
-    <div className="slide">
-      <div className="div-2">
-        <Sidebar
-          className="sidebar-instance"
-          modeCardIcon={<Checkbox check={false} checkNoClassName="design-component-instance-node" />}
-          modeCardIcon1={<Checkbox check={false} checkNoClassName="design-component-instance-node" />}
-          modeCardIcon2={<Checkbox check={false} checkNoClassName="design-component-instance-node" />}
-          modeCardIcon3={<CheckYes className="checkbox-3-instance" />}
-          modeCardIcon4={<Checkbox check={false} checkNoClassName="design-component-instance-node" />}
-          override={<CheckYes className="checkbox-3-instance" />}
-          property1="default"
-        />
-        <div className="main">
-          <div ref={chatHistoryRef} className="chat-history">
-            {chatHistory.map((m) => (
-              <Section message={m.content} role={m.role}/>
-            ))}
+    <div className="App flex h-screen w-screen">
+      {/* <div class="flex-none w-64 h-full"></div> */}
+      <div class="flex flex-1 w-64 h-full justify-center">
+        <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
+          <div ref={chatHistoryRef} class="flex flex-col justify-start w-full flex-grow overflow-y-auto my-2">
+            {messageObjs.map((m) => (<Message obj={m} />))}
           </div>
-          <div ref={promptRef} className="prompt">
-            <Input
-              className="input-instance"
-              description={false}
-              state={inputState}
-              visible={false}
-              onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
-              onSend={handleSendMessage}
-              value={message}
-            />
-          </div>
+          <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
-        <Navbar className="navbar-instance" property1="default" />
       </div>
+      <button class="btn m-2" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
+      <ModelConfig APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleAPIKeySave={handleAPIKeySave} />
     </div>
   );
-};
+}
+
+export default Mentat;

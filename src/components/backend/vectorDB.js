@@ -2,7 +2,6 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "@langchain/core/documents";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { v4 as uuidv4 } from 'uuid';
 
 class VectorDB {
@@ -12,7 +11,7 @@ class VectorDB {
         this.embeddings = new OpenAIEmbeddings({
             openAIApiKey: openAIApiKey, // In Node.js defaults to process.env.OPENAI_API_KEY
             batchSize: batchSize, // Default value if omitted is 512. Max is 2048
-            model: "text-embedding-3",
+            model: "text-embedding-ada-002",
         });
         this.splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
