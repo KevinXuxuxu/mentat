@@ -6,7 +6,7 @@
 
 #### Local run
 ```shell
-docker run --rm -p 1234:1234 -v `pwd`:/app -w /app -it node:21-bookworm-slim /bin/bash
+docker run --rm -p 5173:5173 -v `pwd`:/app -w /app -it node:21-bookworm-slim /bin/bash
 # in container
 npm install
 npm run dev
