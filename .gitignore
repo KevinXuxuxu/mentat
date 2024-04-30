@@ -26,4 +26,5 @@ yarn-error.log*
 api_keys
 /dist
 
+# webstorm / intellij
 .idea
