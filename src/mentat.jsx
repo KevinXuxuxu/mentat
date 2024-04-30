@@ -39,11 +39,13 @@ function Mentat() {
     const aiMessageObj = persistMessage(window.model.metadata, 'AI', response);
     setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
     setLoading(false);
+    setChatEnabled(true);
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && chatEnabled) {
       setLoading(true);
+      setChatEnabled(false);
       handleSendMessage();
     }
   };
@@ -84,7 +86,7 @@ function Mentat() {
   }
 
   return (
-      <div className="App flex h-screen w-screen">
+    <div className="App flex h-screen w-screen">
       {/* <div class="flex-none w-64 h-full"></div> */}
       <div class="flex flex-1 w-64 h-full justify-center">
         <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
