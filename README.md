@@ -11,13 +11,20 @@ docker run --rm -p 5173:5173 -v `pwd`:/app -w /app -it node:21-bookworm-slim /bi
 npm install
 npm run dev
 ```
+
+#### Run tests
+Tentatively putting all tests in `/test` directory. [Vitest](https://vitest.dev/guide/) automatically detect all files with `.test.` in the name and run them.
+```shell
+npm run test
+```
+
 #### Run prettier 
 
 Check current directory
-```
+```shell
 npx prettier . --check
 ```
 Formatt current directory 
-```
+```shell
 npx prettier . --write
 ```
