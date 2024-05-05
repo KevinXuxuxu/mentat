@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import Mentat from '/src/Mentat.jsx'
+import Mentat from './mentat.jsx'
 
 ReactDOM.render(
   <React.StrictMode>
