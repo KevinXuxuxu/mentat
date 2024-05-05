@@ -13,6 +13,7 @@ function Mentat() {
   const [message, setMessage] = useState('');
   const [messageObjs, setMessageObjs] = useState([]);
   const [APIKey, setAPIKey] = useState('');
+  const [loading, setLoading] = useState(false);
   const chatHistoryRef = useRef(null);
 
   const handleInputChange = (event) => {
@@ -27,19 +28,24 @@ function Mentat() {
   }
 
   const handleSendMessage = async () => {
-    if (message.trim() !== '') {
-      const userMessageObj = persistMessage(window.model.metadata, 'Human', message);
-      setMessageObjs([...messageObjs, userMessageObj]);
-      setMessage('');
-
-      const response = await window.model.call(message);
-      const aiMessageObj = persistMessage(window.model.metadata, 'AI', response);
-      setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
+    if (message.trim() === '') {
+      return;
     }
+    const userMessageObj = persistMessage(window.model.metadata, 'Human', message);
+    setMessageObjs([...messageObjs, userMessageObj]);
+    setMessage('');
+
+    const response = await window.model.call(message);
+    const aiMessageObj = persistMessage(window.model.metadata, 'AI', response);
+    setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
+    setLoading(false);
+    setChatEnabled(true);
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && chatEnabled) {
+      setLoading(true);
+      setChatEnabled(false);
       handleSendMessage();
     }
   };
@@ -70,14 +76,21 @@ function Mentat() {
     }
   }, [chatEnabled, messageObjs])
 
+  const renderMessages = () => {
+    return (
+      <div ref={chatHistoryRef} className="flex flex-col justify-start w-full flex-grow overflow-y-auto my-2">
+        {messageObjs.map((m) => (<Message obj={m}/>))}
+        {loading && <span className="loading loading-spinner loading-xs"></span>}
+      </div>
+    );
+  }
+
   return (
     <div className="App flex h-screen w-screen">
       {/* <div class="flex-none w-64 h-full"></div> */}
       <div class="flex flex-1 w-64 h-full justify-center">
         <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
-          <div ref={chatHistoryRef} class="flex flex-col justify-start w-full flex-grow overflow-y-auto my-2">
-            {messageObjs.map((m) => (<Message obj={m} />))}
-          </div>
+          {renderMessages()}
           <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
       </div>
