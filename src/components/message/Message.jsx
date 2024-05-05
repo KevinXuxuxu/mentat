@@ -3,7 +3,6 @@ import SimpleIconsOpenai from "../../icons/SimpleIconsOpenai.jsx";
 import SolarUserCircleLinear from "../../icons/SolarUserCircleLinear.jsx";
 
 export const Message = ({ obj }) => {
-    console.log(obj.id);
     return (
         <div key={obj.id} class={(obj.role === "AI" ? "chat-start" : "chat-end") + " chat py-2"}>
             <div class="chat-image avatar">
