@@ -8,16 +8,19 @@ import { History } from './components/backend/memory.js';
 import { Message } from "./components/message/Message.jsx";
 import { Input } from "./components/Input/Input.jsx";
 import { ModelConfig } from "./components/modelConfig/ModelConfig.jsx";
-import { TransformerJsEmbedder} from './components/backend/embedding.js';
+import { TransformerJsEmbedder } from './components/backend/embedding.js';
 
 function Mentat() {
   const [chatEnabled, setChatEnabled] = useState(false);
   const [message, setMessage] = useState('');
   const [messageObjs, setMessageObjs] = useState([]);
   const [APIKey, setAPIKey] = useState('');
+  const [provider, setProvider] = useState(null);
+  const [model, setModel] = useState(null);
   const [loading, setLoading] = useState(false);
   const chatHistoryRef = useRef(null);
 
+  // Handle message sending.
   const handleInputChange = (event) => {
     setMessage(event.target.value);
   }
@@ -52,25 +55,38 @@ function Mentat() {
     }
   };
 
+  // Handle model config.
+  const handleProviderChange = (event) => {
+    setProvider(event.target.value);
+  }
+
+  const handleModelChange = (event) => {
+    setModel(event.target.value);
+  }
+
   const handleAPIKeyChange = (event) => {
     setAPIKey(event.target.value);
   }
 
-  const handleAPIKeySave = () => {
+  const handleModelConfigSave = () => {
     window.embedder = new OpenAIEmbeddings({
       openAIApiKey: APIKey, // In Node.js defaults to process.env.OPENAI_API_KEY
       batchSize: 512, // Default value if omitted is 512. Max is 2048
       model: "text-embedding-ada-002",
-  })
+    })
     window.vectorDB = new VectorDB(window.db, window.embedder);
     window.vectorDB.constructFromVectors().then(_ => {
       console.log("vector db initialized");
     });
-    // OpenAI model name: gpt-3.5-turbo-1106, gpt-4-turbo-2024-04-09
-    window.model = new Model(APIKey, null, 'gpt-4-turbo-2024-04-09');
+    if (window.model == null) {
+      window.model = new Model(provider, model, APIKey, null);
+    } else {
+      window.model = new Model(provider, model, APIKey, null, window.model.memory);
+    }
     setChatEnabled(true);
   }
 
+  // Initialization.
   useEffect(() => {
     if (!window.initialized) {
       window.db = IndexedDB;
@@ -85,7 +101,7 @@ function Mentat() {
   const renderMessages = () => {
     return (
       <div ref={chatHistoryRef} className="flex flex-col justify-start w-full flex-grow overflow-y-auto my-2">
-        {messageObjs.map((m) => (<Message obj={m}/>))}
+        {messageObjs.map((m) => (<Message obj={m} />))}
         {loading && <span className="loading loading-spinner loading-xs"></span>}
       </div>
     );
@@ -101,7 +117,7 @@ function Mentat() {
         </div>
       </div>
       <button class="btn m-2" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
-      <ModelConfig APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleAPIKeySave={handleAPIKeySave} />
+      <ModelConfig provider={provider} handleProviderChange={handleProviderChange} model={model} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
     </div>
   );
 }

@@ -6,10 +6,9 @@ import { MTTBufferMemory, MTTConversationSummaryBufferMemory } from "./memory";
 
 class Model {
 
-    constructor(APIKey, db, modelName, memory = null,  
+    constructor(provider, modelName, APIKey, db, memory = null,  
         memoryType = "summary_buffer", 
-        maxTokenLimit = 3000, 
-        provider = "openai") {
+        maxTokenLimit = 3000) {
         // Create metadata
         this.metadata = {
             provider: provider,
@@ -19,7 +18,7 @@ class Model {
         }
 
         // Base model from provider
-        if (provider === "openai") {
+        if (provider === "OpenAI") {
             this.model = new ChatOpenAI({ openAIApiKey: APIKey, modelName: modelName });
         } else {
             throw new Error(`provider ${provider} not supported`);
