@@ -5,7 +5,7 @@ import IndexedDB from './components/backend/indexedDB.js';
 import VectorDB from './components/backend/vectorDB.js';
 import { History } from './components/backend/memory.js';
 import { Message } from "./components/message/Message.jsx";
-import { Input } from "./components/input/Input.jsx";
+import { Input } from "./components/Input/Input.jsx";
 import { ModelConfig } from "./components/modelConfig/ModelConfig.jsx";
 
 function Mentat() {
