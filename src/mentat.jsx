@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import './Mentat.css';
 import Model from "./components/backend/model.js";
 import IndexedDB from './components/backend/indexedDB.js';
@@ -56,7 +57,12 @@ function Mentat() {
   }
 
   const handleAPIKeySave = () => {
-    window.vectorDB = new VectorDB(window.db, APIKey);
+    window.embedder = new OpenAIEmbeddings({
+      openAIApiKey: APIKey, // In Node.js defaults to process.env.OPENAI_API_KEY
+      batchSize: 512, // Default value if omitted is 512. Max is 2048
+      model: "text-embedding-ada-002",
+  })
+    window.vectorDB = new VectorDB(window.db, window.embedder);
     window.vectorDB.constructFromVectors().then(_ => {
       console.log("vector db initialized");
     });
@@ -72,10 +78,10 @@ function Mentat() {
       window.chatHistory = new History(IndexedDB);
       window.initialized = true;
     }
-    if (window.embedder == null) {
-      // https://huggingface.co/Xenova/bge-base-en-v1.5
-      window.embedder = new TransformerJsEmbedder('Xenova/bge-base-en-v1.5');
-    }
+    // if (window.embedder == null) {
+    //   // https://huggingface.co/Xenova/bge-base-en-v1.5
+    //   window.embedder = new TransformerJsEmbedder('Xenova/bge-base-en-v1.5');
+    // }
     if (chatEnabled) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }

@@ -1,27 +1,22 @@
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { OpenAIEmbeddings } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "@langchain/core/documents";
 import { v4 as uuidv4 } from 'uuid';
 
 class VectorDB {
 
-    constructor(indexedDB, openAIApiKey, batchSize = 512) {
+    constructor(indexedDB, embedder) {
         this.indexedDB = indexedDB;
-        this.embeddings = new OpenAIEmbeddings({
-            openAIApiKey: openAIApiKey, // In Node.js defaults to process.env.OPENAI_API_KEY
-            batchSize: batchSize, // Default value if omitted is 512. Max is 2048
-            model: "text-embedding-ada-002",
-        });
+        this.embedder = embedder;
         this.splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
             chunkOverlap: 200,
             separators: ["|", "##", ">", "-", "\n", "\n\n"]
         });
+        this.db = new MemoryVectorStore(this.embedder);
     }
 
     async constructFromVectors() {
-        this.db = new MemoryVectorStore(this.embeddings);
         await this.indexedDB.ready;
         const vectorObjs = await this.indexedDB.object("embedding").getAll();
         const vectors = vectorObjs.map(v => v.vector);
@@ -40,7 +35,7 @@ class VectorDB {
                 }
             })
         ]);
-        const vectors = await this.embeddings.embedDocuments(documents.map(d => d.pageContent));
+        const vectors = await this.embedder.embedDocuments(documents.map(d => d.pageContent));
         this.db.addVectors(vectors, documents);
         vectors.forEach((v) =>
             this.indexedDB.object('embedding').put( {
