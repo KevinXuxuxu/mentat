@@ -10,10 +10,14 @@ class TransformerJsEmbedder {
         this.pipeline = pipeline("feature-extraction", model);
     }
 
-    async embed(content) {
+    async embedDocuments(content) {
         const pipeline = await this.pipeline;
         const embedding = await pipeline(content, { pooling: 'mean', normalize: true });
         return embedding.tolist();
+    }
+
+    async embedQuery(query) {
+        return (await this.embedDocuments([ query ]))[0];
     }
 }
 
