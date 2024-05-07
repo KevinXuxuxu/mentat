@@ -73,15 +73,10 @@ function Mentat() {
 
   useEffect(() => {
     if (!window.initialized) {
-      // document.documentElement.setAttribute('data-theme', 'synthwave');
       window.db = IndexedDB;
       window.chatHistory = new History(IndexedDB);
       window.initialized = true;
     }
-    // if (window.embedder == null) {
-    //   // https://huggingface.co/Xenova/bge-base-en-v1.5
-    //   window.embedder = new TransformerJsEmbedder('Xenova/bge-base-en-v1.5');
-    // }
     if (chatEnabled) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }
