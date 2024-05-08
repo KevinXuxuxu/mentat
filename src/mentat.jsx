@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import './Mentat.css';
-import Model from "./components/backend/model.js";
+import Assistant from "./components/backend/assistant.js";
 import IndexedDB from './components/backend/indexedDB.js';
 import VectorDB from './components/backend/vectorDB.js';
 import { History } from './components/backend/memory.js';
@@ -36,12 +36,12 @@ function Mentat() {
     if (message.trim() === '') {
       return;
     }
-    const userMessageObj = persistMessage(window.model.metadata, 'Human', message);
+    const userMessageObj = persistMessage(window.assistant.metadata, 'Human', message);
     setMessageObjs([...messageObjs, userMessageObj]);
     setMessage('');
 
-    const response = await window.model.call(message);
-    const aiMessageObj = persistMessage(window.model.metadata, 'AI', response);
+    const response = await window.assistant.call(message);
+    const aiMessageObj = persistMessage(window.assistant.metadata, 'AI', response);
     setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
     setLoading(false);
     setChatEnabled(true);
@@ -78,10 +78,10 @@ function Mentat() {
     window.vectorDB.constructFromVectors().then(_ => {
       console.log("vector db initialized");
     });
-    if (window.model == null) {
-      window.model = new Model(provider, model, APIKey, null);
+    if (window.assistant == null) {
+      window.assistant = new Assistant(provider, model, APIKey, null);
     } else {
-      window.model = new Model(provider, model, APIKey, null, window.model.memory);
+      window.assistant = new Assistant(provider, model, APIKey, null, window.assistant.memory);
     }
     setChatEnabled(true);
   }
