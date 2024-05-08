@@ -1,4 +1,5 @@
-
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 import SimpleIconsGooglegemini from "../../icons/SimpleIconsGooglegemini.jsx";
 import SimpleIconsOpenai from "../../icons/SimpleIconsOpenai.jsx";
 import SolarUserCircleLinear from "../../icons/SolarUserCircleLinear.jsx";
@@ -31,7 +32,7 @@ export const Message = ({ obj }) => {
                 </span>
                 <time class="text-xs opacity-50">{ts.toLocaleTimeString()}</time>
             </div>
-            <div class="chat-bubble">{content}</div>
+            <div class="chat-bubble prose" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(content)) }}></div>
         </div>
     );
 };
