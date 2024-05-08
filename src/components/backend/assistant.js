@@ -4,7 +4,7 @@ import { ConversationChain } from "langchain/chains";
 import { v4 as uuidv4 } from 'uuid';
 import { MTTBufferMemory, MTTConversationSummaryBufferMemory } from "./memory";
 
-class Model {
+class Assistant {
 
     constructor(provider, modelName, APIKey, db, memory = null,  
         memoryType = "summary_buffer", 
@@ -52,4 +52,4 @@ class Model {
     }
 }
 
-export default Model;
+export default Assistant;
