@@ -26,7 +26,7 @@ class VectorDB {
         this.db.addVectors(vectors, documents);
     }
 
-    async addMessageToVectorDB(message, id) {
+    async addMessage(message, id) {
         const documents = await this.splitter.splitDocuments([
             new Document({
                 pageContent: message,
@@ -44,6 +44,15 @@ class VectorDB {
                 vector: v
             } )
         )
+    }
+
+    // For migration purposes
+    async addAllHistory() {
+        await this.indexedDB.ready;
+        const historyObjs = await this.indexedDB.object("history").getAll();
+        await Promise.all(historyObjs.map(async (m) => {
+            await this.addMessage(m.content, m.id);
+        }));
     }
 
     async search(queryText) {

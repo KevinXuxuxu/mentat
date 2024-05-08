@@ -1,7 +1,6 @@
+import { providerModels } from "../backend/assistant";
+
 export const ModelConfig = ({ provider, handleProviderChange, model, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
-    const providerModels = {
-        OpenAI: ['gpt-3.5-turbo-1106', 'gpt-4-turbo-2024-04-09']
-    }
     const enableSave = () => {
         return provider != null && model != null && APIKey != '';
     }
@@ -14,7 +13,8 @@ export const ModelConfig = ({ provider, handleProviderChange, model, handleModel
                 </select>
                 <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
                     <option disabled>Model</option>
-                    {provider != null && providerModels[provider].map((m) => (<option key={m}>{m}</option>))}
+                    {provider != null && (<option key={providerModels[provider][0]} selected>{providerModels[provider][0]}</option>)}
+                    {provider != null && providerModels[provider].slice(1).map((m) => (<option key={m}>{m}</option>))}
                 </select>
                 <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} />
                 <div class="modal-action">
