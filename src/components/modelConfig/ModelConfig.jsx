@@ -8,8 +8,8 @@ const renderSelectModel = (provider, handleModelChange) => {
             </select>
         );
     }
-    const firstModel = providerModels[provider][0];
-    const otherModels = providerModels[provider].slice(1);
+    const firstModel = providerModels[provider].models[0];
+    const otherModels = providerModels[provider].models.slice(1);
     return (
         <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
             <option disabled>Model</option>
@@ -20,7 +20,8 @@ const renderSelectModel = (provider, handleModelChange) => {
 }
 
 export const ModelConfig = ({ provider, handleProviderChange, model, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
-    const enableSave = provider != null && model != null && APIKey != '' ? {} : { disabled: true };
+    const needAPIKey = provider == null ? true : providerModels[provider].needAPIKey;
+    const enableSave = provider != null && model != null && (!needAPIKey || APIKey != '') ? {} : { disabled: true };
     return (
         <dialog id="model_config" class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
@@ -29,7 +30,7 @@ export const ModelConfig = ({ provider, handleProviderChange, model, handleModel
                     {Object.keys(providerModels).map((p) => (<option key={p}>{p}</option>))}
                 </select>
                 {renderSelectModel(provider, handleModelChange)}
-                <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} />
+                <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} disabled={!needAPIKey} />
                 <div class="modal-action">
                     <form method="dialog">
                         <button class="btn" onClick={handleModelConfigSave} {...enableSave}>Save</button>

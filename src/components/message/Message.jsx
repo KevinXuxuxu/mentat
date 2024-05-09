@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
+import OllamaIcon from "../../icons/Ollama.jsx";
 import SimpleIconsGooglegemini from "../../icons/SimpleIconsGooglegemini.jsx";
 import SimpleIconsOpenai from "../../icons/SimpleIconsOpenai.jsx";
 import SolarUserCircleLinear from "../../icons/SolarUserCircleLinear.jsx";
@@ -12,6 +13,8 @@ const renderIcon = (role, provider) => {
             return (<SimpleIconsOpenai />);
         } else if (provider === "Google") {
             return (<SimpleIconsGooglegemini />);
+        } else if (provider === "Ollama") {
+            return (<OllamaIcon />);
         }
     }
 }
