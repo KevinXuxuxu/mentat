@@ -1,10 +1,26 @@
+import { providerModels } from "../backend/assistant";
+
+const renderSelectModel = (provider, handleModelChange) => {
+    if (provider == null) {
+        return (
+            <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
+                <option disabled>Model</option>
+            </select>
+        );
+    }
+    const firstModel = providerModels[provider][0];
+    const otherModels = providerModels[provider].slice(1);
+    return (
+        <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
+            <option disabled>Model</option>
+            <option key={firstModel} selected>{firstModel}</option>
+            {otherModels.map((m) => (<option key={m}>{m}</option>))}
+        </select>
+    );
+}
+
 export const ModelConfig = ({ provider, handleProviderChange, model, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
-    const providerModels = {
-        OpenAI: ['gpt-3.5-turbo-1106', 'gpt-4-turbo-2024-04-09']
-    }
-    const enableSave = () => {
-        return provider != null && model != null && APIKey != '';
-    }
+    const enableSave = provider != null && model != null && APIKey != '' ? {} : { disabled: true };
     return (
         <dialog id="model_config" class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
@@ -12,15 +28,11 @@ export const ModelConfig = ({ provider, handleProviderChange, model, handleModel
                     <option disabled>Provider</option>
                     {Object.keys(providerModels).map((p) => (<option key={p}>{p}</option>))}
                 </select>
-                <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
-                    <option disabled>Model</option>
-                    {provider != null && providerModels[provider].map((m) => (<option key={m}>{m}</option>))}
-                </select>
+                {renderSelectModel(provider, handleModelChange)}
                 <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} />
                 <div class="modal-action">
                     <form method="dialog">
-                        {enableSave() && <button class="btn" onClick={handleModelConfigSave}>Save</button>}
-                        {!enableSave() && <button class="btn" onClick={handleModelConfigSave} disabled>Save</button>}
+                        <button class="btn" onClick={handleModelConfigSave} {...enableSave}>Save</button>
                     </form>
                 </div>
             </div>
