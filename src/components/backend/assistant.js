@@ -15,12 +15,12 @@ const getLLM = (provider, modelName, APIKey, temperature = 0.9) => {
     }
 }
 
-const providerModels = {
+export const providerModels = {
     OpenAI: ['gpt-3.5-turbo-1106', 'gpt-4-turbo-2024-04-09'],
     Google: ['gemini-pro']
 }
 
-class Assistant {
+export class Assistant {
 
     constructor(provider, modelName, APIKey, db, memory = null,
         memoryType = "summary_buffer",
@@ -63,5 +63,3 @@ class Assistant {
         });
     }
 }
-
-export { Assistant, providerModels };
