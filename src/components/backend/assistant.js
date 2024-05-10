@@ -1,5 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatMistralAI } from "@langchain/mistralai";
 import { ChatOllama } from "@langchain/community/chat_models/ollama";
 import { ConversationChain } from "langchain/chains";
 
@@ -11,11 +12,13 @@ const getLLM = (provider, modelName, APIKey, temperature = 0.9) => {
         return new ChatOpenAI({ openAIApiKey: APIKey, modelName: modelName, temperature: temperature });
     } else if (provider === "Google") {
         return new ChatGoogleGenerativeAI({ apiKey: APIKey, model: modelName, temperature: temperature });
+    } else if (provider === "Mistral") {
+        return new ChatMistralAI({ apiKey: APIKey, model: modelName });
     } else if (provider == "Ollama") {
-        return new  ChatOllama({
+        return new ChatOllama({
             baseUrl: "http://localhost:11434", // Default value
             model: modelName,
-          });
+        });
     } else {
         throw new Error(`provider ${provider} not supported`);
     }
@@ -28,6 +31,10 @@ export const providerModels = {
     },
     Google: {
         models: ['gemini-pro'],
+        needAPIKey: true
+    },
+    Mistral: {
+        models: ['mistral-small-latest', 'mistral-medium-latest', 'mistral-large-latest'],
         needAPIKey: true
     },
     Ollama: {
