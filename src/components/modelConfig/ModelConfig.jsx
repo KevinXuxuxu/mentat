@@ -19,7 +19,7 @@ const renderSelectModel = (provider, handleModelChange) => {
     );
 }
 
-export const ModelConfig = ({ provider, handleProviderChange, model, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
+export const ModelConfig = ({ provider, handleProviderChange, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
     const needAPIKey = provider == null ? true : providerModels[provider].needAPIKey;
     const enableSave = provider != null && (!needAPIKey || APIKey != '') ? {} : { disabled: true };
     return (
