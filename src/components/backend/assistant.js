@@ -1,5 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatOllama } from "@langchain/community/chat_models/ollama";
 import { ConversationChain } from "langchain/chains";
 
 import { v4 as uuidv4 } from 'uuid';
@@ -10,14 +11,29 @@ const getLLM = (provider, modelName, APIKey, temperature = 0.9) => {
         return new ChatOpenAI({ openAIApiKey: APIKey, modelName: modelName, temperature: temperature });
     } else if (provider === "Google") {
         return new ChatGoogleGenerativeAI({ apiKey: APIKey, model: modelName, temperature: temperature });
+    } else if (provider == "Ollama") {
+        return new  ChatOllama({
+            baseUrl: "http://localhost:11434", // Default value
+            model: modelName,
+          });
     } else {
         throw new Error(`provider ${provider} not supported`);
     }
 }
 
 export const providerModels = {
-    OpenAI: ['gpt-3.5-turbo-1106', 'gpt-4-turbo-2024-04-09'],
-    Google: ['gemini-pro']
+    OpenAI: {
+        models: ['gpt-3.5-turbo-1106', 'gpt-4-turbo-2024-04-09'],
+        needAPIKey: true
+    },
+    Google: {
+        models: ['gemini-pro'],
+        needAPIKey: true
+    },
+    Ollama: {
+        models: ['llama2', 'llama3', 'mixtral'],
+        needAPIKey: false
+    }
 }
 
 export class Assistant {
