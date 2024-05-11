@@ -1,5 +1,6 @@
 import { BufferMemory, ConversationSummaryBufferMemory } from "langchain/memory";
 import { v4 as uuidv4 } from 'uuid';
+import { downloadData } from "./utils";
 
 class History {
     constructor(db) {
@@ -19,6 +20,11 @@ class History {
 
     put(message) {
         this.db.object('history').put(message)
+    }
+
+    async download() {
+        const data = await this.db.object('history').getAll();
+        downloadData('history.json', data);
     }
 }
 
