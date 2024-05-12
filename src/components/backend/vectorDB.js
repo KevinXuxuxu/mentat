@@ -38,11 +38,11 @@ class VectorDB {
         const vectors = await this.embedder.embedDocuments(documents.map(d => d.pageContent));
         this.db.addVectors(vectors, documents);
         vectors.forEach((v) =>
-            this.indexedDB.object('embedding').put( {
+            this.indexedDB.object('embedding').put({
                 uuid: uuidv4(),
                 id: id,
                 vector: v
-            } )
+            })
         )
     }
 
@@ -56,12 +56,13 @@ class VectorDB {
     }
 
     async search(queryText) {
-        const res = await this.db.similaritySearch(queryText, 1);
-        const id = res[0].metadata.id;
-        const history = await this.indexedDB.object('history').get(id);
-        // Temp before we have search
-        console.log(history.content);
-        return history;
+        const res = await this.db.similaritySearch(queryText, 3);
+        const messages = await Promise.all(res.map(async (r) => {
+            const id = r.metadata.id;
+            const history = await this.indexedDB.object('history').get(id);
+            return history.content;
+        }))
+        return messages;
     }
 }
 
