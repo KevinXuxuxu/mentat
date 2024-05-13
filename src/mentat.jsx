@@ -8,6 +8,7 @@ import { Message } from "./components/message/Message.jsx";
 import { Input } from "./components/Input/Input.jsx";
 import { ModelConfig } from "./components/modelConfig/ModelConfig.jsx";
 import { TransformerJsEmbedder } from './components/backend/embedding.js';
+import { Search } from "./components/search/Search.jsx";
 
 function Mentat() {
   const [chatEnabled, setChatEnabled] = useState(false);
@@ -105,14 +106,16 @@ function Mentat() {
 
   return (
     <div className="App flex h-screen w-screen">
-      {/* <div class="flex-none w-64 h-full"></div> */}
+      <Search />
+
       <div class="flex flex-1 w-64 h-full justify-center">
         <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
           {renderMessages()}
           <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
+        <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
       </div>
-      <button class="btn m-2" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
+
       <ModelConfig provider={provider} handleProviderChange={handleProviderChange} model={model} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
     </div>
   );
