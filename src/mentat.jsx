@@ -59,6 +59,7 @@ function Mentat() {
   const handleProviderChange = (event) => {
     setProvider(event.target.value);
     setModel(providerModels[event.target.value][0]);
+    setAPIKey('');
   }
 
   const handleModelChange = (event) => {
@@ -76,9 +77,9 @@ function Mentat() {
       console.log("vector db initialized");
     });
     if (window.assistant == null) {
-      window.assistant = new Assistant(provider, model, APIKey, null);
+      window.assistant = new Assistant(provider, model, APIKey, window.db);
     } else {
-      window.assistant = new Assistant(provider, model, APIKey, null, window.assistant.memory);
+      window.assistant.replaceModel(provider, model, APIKey);
     }
     setChatEnabled(true);
   }
@@ -116,7 +117,7 @@ function Mentat() {
         <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
       </div>
 
-      <ModelConfig provider={provider} handleProviderChange={handleProviderChange} model={model} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
+      <ModelConfig provider={provider} handleProviderChange={handleProviderChange} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
     </div>
   );
 }

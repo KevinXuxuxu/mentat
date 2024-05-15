@@ -19,9 +19,9 @@ const renderSelectModel = (provider, handleModelChange) => {
     );
 }
 
-export const ModelConfig = ({ provider, handleProviderChange, model, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
+export const ModelConfig = ({ provider, handleProviderChange, handleModelChange, APIKey, handleAPIKeyChange, handleModelConfigSave }) => {
     const needAPIKey = provider == null ? true : providerModels[provider].needAPIKey;
-    const enableSave = provider != null && model != null && (!needAPIKey || APIKey != '') ? {} : { disabled: true };
+    const disabled = provider == null || (needAPIKey && APIKey === '');
     return (
         <dialog id="model_config" class="modal modal-bottom sm:modal-middle">
             <div class="modal-box">
@@ -33,7 +33,7 @@ export const ModelConfig = ({ provider, handleProviderChange, model, handleModel
                 <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} disabled={!needAPIKey} />
                 <div class="modal-action">
                     <form method="dialog">
-                        <button class="btn" onClick={handleModelConfigSave} {...enableSave}>Save</button>
+                        <button class="btn" onClick={handleModelConfigSave} disabled={disabled}>Save</button>
                     </form>
                 </div>
             </div>
