@@ -9,16 +9,14 @@ import SolarUserCircleLinear from "../../icons/SolarUserCircleLinear.jsx";
 const renderIcon = (role, provider) => {
     if (role === "Human") {
         return (<SolarUserCircleLinear />);
-    } else if (role === "AI") {
-        if (provider === "OpenAI") {
-            return (<SimpleIconsOpenai />);
-        } else if (provider === "Google") {
-            return (<SimpleIconsGooglegemini />);
-        } else if (provider === "Mistral") {
-            return (<LogosMistralAiIcon />);
-        } else if (provider === "Ollama") {
-            return (<OllamaIcon />);
-        }
+    } else if (provider === "OpenAI") {
+        return (<SimpleIconsOpenai />);
+    } else if (provider === "Google") {
+        return (<SimpleIconsGooglegemini />);
+    } else if (provider === "Mistral") {
+        return (<LogosMistralAiIcon />);
+    } else if (provider === "Ollama") {
+        return (<OllamaIcon />);
     }
 }
 

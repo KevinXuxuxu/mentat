@@ -59,6 +59,7 @@ function Mentat() {
   const handleProviderChange = (event) => {
     setProvider(event.target.value);
     setModel(providerModels[event.target.value][0]);
+    setAPIKey('');
   }
 
   const handleModelChange = (event) => {
