@@ -9,6 +9,8 @@ import { Input } from "./components/Input/Input.jsx";
 import { ModelConfig } from "./components/modelConfig/ModelConfig.jsx";
 import { TransformerJsEmbedder } from './components/backend/embedding.js';
 import { Search } from "./components/search/Search.jsx";
+import { Alert } from "./components/alert/Alert.jsx";
+import { AppendChild } from "./components/utils.js";
 
 function Mentat() {
   const [chatEnabled, setChatEnabled] = useState(false);
@@ -40,9 +42,13 @@ function Mentat() {
     setMessageObjs([...messageObjs, userMessageObj]);
     setMessage('');
 
-    const response = await window.assistant.call(message);
-    const aiMessageObj = persistMessage(window.assistant.metadata, 'AI', response);
-    setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
+    try {
+      const response = await window.assistant.call(message);
+      const aiMessageObj = persistMessage(window.assistant.metadata, 'AI', response);
+      setMessageObjs([...messageObjs, userMessageObj, aiMessageObj]);
+    } catch (error) {
+      AppendChild(chatHistoryRef.current, <Alert content={error.message} />);
+    }
     setLoading(false);
     setChatEnabled(true);
   };
@@ -96,7 +102,7 @@ function Mentat() {
     }
   }, [chatEnabled, messageObjs])
 
-  const renderMessages = () => {
+  const renderChatHistory = () => {
     return (
       <div ref={chatHistoryRef} className="flex flex-col justify-start w-full flex-grow overflow-y-auto my-2">
         {messageObjs.map((m) => (<Message obj={m} />))}
@@ -111,7 +117,7 @@ function Mentat() {
 
       <div class="flex flex-1 w-64 h-full justify-center">
         <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
-          {renderMessages()}
+          {renderChatHistory()}
           <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
         <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>

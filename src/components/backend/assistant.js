@@ -31,19 +31,19 @@ const getLLM = (provider, modelName, APIKey, temperature = 0.9) => {
 }
 
 export const providerModels = {
-    OpenAI: {
-        models: ['gpt-3.5-turbo-1106', 'gpt-4-turbo-2024-04-09'],
+    OpenAI: { // https://platform.openai.com/docs/models
+        models: ['gpt-3.5-turbo-0125', 'gpt-4-turbo', 'gpt-4o'],
         needAPIKey: true
     },
-    Google: {
-        models: ['gemini-pro'],
+    Google: { // https://ai.google.dev/gemini-api/docs/models/gemini
+        models: ['gemini-pro', 'gemini-1.5-flash-latest', 'gemini-1.5-pro-latest'],
         needAPIKey: true
     },
-    Mistral: {
+    Mistral: { // https://docs.mistral.ai/getting-started/models/
         models: ['mistral-small-latest', 'mistral-medium-latest', 'mistral-large-latest'],
         needAPIKey: true
     },
-    Ollama: {
+    Ollama: { // https://ollama.com/library
         models: ['llama2', 'llama3', 'mixtral'],
         needAPIKey: false
     }
@@ -95,10 +95,7 @@ export class Assistant {
     }
 
     async call(prompt) {
-        return new Promise((resolve, _) => {
-            this.chain.call({ input: prompt }).then(result => {
-                resolve(result.response);
-            })
-        });
+        const result = await this.chain.call({ input: prompt });
+        return result.response;
     }
 }

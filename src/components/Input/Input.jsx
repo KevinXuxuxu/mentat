@@ -13,7 +13,7 @@ export const Input = ({ chatEnabled, message, handleKeyPress, handleInputChange,
                 </div>)}
             {chatEnabled ? (
                 <div class="flex-fit self-center p-2">
-                    <SolarRoundArrowUpBold onClick={handleSendMessage} />
+                    <SolarRoundArrowUpBold onClick={handleSendMessage} class="cursor-pointer" />
                 </div>) : (
                 <div class="flex-fit self-center p-2">
                     <SolarRoundArrowUpLineDuotone />

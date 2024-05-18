@@ -30,7 +30,7 @@ export const Search = () => {
     };
 
     return (
-        <div class="flex flex-col w-72 h-full bg-neutral-content">
+        <div class="flex flex-col w-72 h-full border-gray-400 rounded-lg border-2">
 
             {/* Search input and button */}
             <div class="flex h-fit w-full p-2">
@@ -44,7 +44,7 @@ export const Search = () => {
 
                 <div class="flex-fit self-center p-2">
                     {/* TODO: Need to disable search during loading */}
-                    <MaterialSymbolsSearchRounded onClick={handleSearch} />
+                    <MaterialSymbolsSearchRounded onClick={handleSearch} class="cursor-pointer"/>
                 </div>
             </div>
 
