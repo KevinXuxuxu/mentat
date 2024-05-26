@@ -33,7 +33,6 @@ export const ModelConfig = ({ provider, handleProviderChange, handleModelChange,
                 <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} disabled={!needAPIKey} />
                 <div class="modal-action">
                     <form method="dialog">
-                        {/* add small inline space-x-2 space between two buttons */}
                         <button class="btn hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={handleModelConfigSave} disabled={disabled}>Save</button>
                         <button class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => document.getElementById('model_config').close()} >Cancel</button>
                     </form>
