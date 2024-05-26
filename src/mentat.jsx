@@ -120,7 +120,7 @@ function Mentat() {
           {renderChatHistory()}
           <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
-        <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
+        <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').show()}>Model</button>
       </div>
 
       <ModelConfig provider={provider} handleProviderChange={handleProviderChange} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
