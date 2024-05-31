@@ -23,18 +23,18 @@ export const ModelConfig = ({ provider, handleProviderChange, handleModelChange,
     const needAPIKey = provider == null ? true : providerModels[provider].needAPIKey;
     const disabled = provider == null || (needAPIKey && APIKey === '');
     return (
-        <dialog id="model_config" class="modal modal-bottom sm:modal-middle">
-            <div class="modal-box">
-                <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Provider" onChange={handleProviderChange}>
+        <dialog id="model_config" className="modal modal-bottom sm:modal-middle">
+            <div className="modal-box">
+                <select className="select select-bordered w-full max-w-xs m-2" defaultValue="Provider" onChange={handleProviderChange}>
                     <option disabled>Provider</option>
                     {Object.keys(providerModels).map((p) => (<option key={p}>{p}</option>))}
                 </select>
                 {renderSelectModel(provider, handleModelChange)}
-                <input type="text" placeholder="API Key" class="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} disabled={!needAPIKey} />
-                <div class="modal-action">
+                <input type="text" placeholder="API Key" className="input input-bordered w-full m-2" value={APIKey} onChange={handleAPIKeyChange} disabled={!needAPIKey} />
+                <div className="modal-action">
                     <form method="dialog">
-                        <button class="btn hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={handleModelConfigSave} disabled={disabled}>Save</button>
-                        <button class="btn bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => document.getElementById('model_config').close()} >Cancel</button>
+                        <button className="btn bg-transparent hover:bg-blue-200 text-blue-300 font-semibold hover:text-white py-2 px-4 border border-blue-300 hover:border-transparent rounded" onClick={() => document.getElementById('model_config').close()} >Cancel</button>
+                        <button className="btn hover:bg-blue-500 text-blue-500 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded ml-2" onClick={handleModelConfigSave} disabled={disabled}>Save</button>
                     </form>
                 </div>
             </div>
