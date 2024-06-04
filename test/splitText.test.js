@@ -26,7 +26,7 @@ test('vectorDB splitText function test with other separators', async () => {
     And another one\nAnd yet another sentence\n\nAnd a sentence with a period.And a sentence with a question mark?And a sentence with an exclamation mark!`
     const testChunkSize = 20;
     const testChunkOverlap = 5;
-    separators = ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"]
+    const separators = ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"]
     const { splittedTexts, offsets } = await vectorDB.splitText(testText, testChunkSize, testChunkOverlap, separators);
     expect(splittedTexts).toEqual([
         "This is a test text",

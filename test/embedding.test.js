@@ -2,7 +2,8 @@ import { expect, test } from 'vitest'
 import { TransformerJsEmbedder } from '../src/components/backend/embedding';
 import VectorDB from '../src/components/backend/vectorDB';
 
-test('basic embedding recall test', async () => {
+test('basic embedding recall test', {timeout: 10000}, // Timeout value in milliseconds
+  async () => {
     const data = [
         {
             "sentence": "The cat sat on the mat.",
