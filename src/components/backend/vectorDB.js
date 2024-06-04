@@ -83,17 +83,15 @@ class VectorDB {
 
     async search(queryText) {
         const res = await this.db.similaritySearch(queryText, 6);
-        // debugger
-        // const res = await this.db.similaritySearchWithScore(queryText, 6);
+        // const {res, simScores} = await this.db.similaritySearchWithScore(queryText, 6);
         // get the chunk of message that relates to the query text
         const allMessages = await Promise.all(res.map(async (r) => {
             const id = r.metadata.id;
             const message = await this.indexedDB.object('history').get(id);
             const offset = r.metadata.offset;
-            // debugger
             return message.content.substring(offset[0], offset[1]);
         }))
-        // remove duplicated messages; need to dedup since chunks can have overlapping text too. 
+        // remove duplicated messages; need to dedup since chunks can have repeated text too. - not doing this because repeated text can be relevant.
         // const uniqueMessages = allMessages.filter((message, index, self) => {
         //     return index === self.findIndex((m) => (
         //         m.metadata.id === message.metadata.id
