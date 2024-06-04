@@ -1,7 +1,5 @@
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { VectorStoreRetrieverMemory } from "langchain/memory";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { Document } from "@langchain/core/documents";
 import { v4 as uuidv4 } from 'uuid';
 
 class VectorDB {
@@ -30,6 +28,7 @@ class VectorDB {
     }
 
     async splitText(text, chunkSize, chunkOverlap) {
+        // TODO: add unit tests for this function
         const splittedTexts = [];
         const offsets = [];
         let start = 0;
@@ -38,7 +37,12 @@ class VectorDB {
             if (end > text.length) {
                 end = text.length;
             }
-            const splittedText = text.substring(start, end);
+            let splittedText = text.substring(start, end);
+            let lastSentenceEnd = splittedText.lastIndexOf('.') || splittedText.lastIndexOf('?') || splittedText.lastIndexOf('!');
+            if (lastSentenceEnd !== -1) {
+                splittedText = splittedText.substring(0, lastSentenceEnd + 1);
+                end = start + lastSentenceEnd + 1;
+            }
             splittedTexts.push(splittedText);
             offsets.push([start, end]);
             start += chunkSize - chunkOverlap;
@@ -81,22 +85,18 @@ class VectorDB {
         }));
     }
 
-    async search(queryText) {
-        const res = await this.db.similaritySearch(queryText, 6);
-        // const {res, simScores} = await this.db.similaritySearchWithScore(queryText, 6);
+    async search(queryText, threshold=0.6) {
+        const {res, simScores} = await this.db.similaritySearchWithScore(queryText, 6);
+        // remove results below threshold and preserve the order
+        const filteredRes = res.filter((r, index) => simScores[index] > threshold);
+
         // get the chunk of message that relates to the query text
-        const allMessages = await Promise.all(res.map(async (r) => {
+        const allMessages = await Promise.all(filteredRes.map(async (r) => {
             const id = r.metadata.id;
             const message = await this.indexedDB.object('history').get(id);
             const offset = r.metadata.offset;
             return message.content.substring(offset[0], offset[1]);
         }))
-        // remove duplicated messages; need to dedup since chunks can have repeated text too. - not doing this because repeated text can be relevant.
-        // const uniqueMessages = allMessages.filter((message, index, self) => {
-        //     return index === self.findIndex((m) => (
-        //         m.metadata.id === message.metadata.id
-        //     ));
-        // });
         return allMessages;
     }
 }
