@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MaterialSymbolsSearchRounded from "../../icons/MaterialSymbolsSearchRounded.jsx";
 
-export const Search = () => {
+export const Search = ({ searchInitialized }) => {
     const [keywords, setKeywords] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -40,11 +40,11 @@ export const Search = () => {
                     value={keywords}
                     onChange={handleInputChange}
                     placeholder="Enter keywords"
+                    disabled={loading || !searchInitialized}
                 />
 
                 <div class="flex-fit self-center p-2">
-                    {/* TODO: Need to disable search during loading */}
-                    <MaterialSymbolsSearchRounded onClick={handleSearch} class="cursor-pointer"/>
+                    <MaterialSymbolsSearchRounded onClick={handleSearch} class="cursor-pointer" disabled={loading || !searchInitialized} />
                 </div>
             </div>
 
