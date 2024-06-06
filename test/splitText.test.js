@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import VectorDB from '../src/components/backend/vectorDB';
 
-// generate unit test for splitText function in vectorDB.js
+// test for splitText function in vectorDB.js
 test('vectorDB splitText function test', async () => {
     const vectorDB = new VectorDB(null, null, 20, 5);
     const testText = "This is a test text. It has multiple sentences. Each sentence should be split into separate chunks.";

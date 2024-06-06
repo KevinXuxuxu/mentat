@@ -29,14 +29,13 @@ class VectorDB {
 
     async addMessage(message, id) {
         // add messsage to vector db in session, and to indexDB for persistence.
-        // TODO: offsets are inside the text, need to verify format.
-        const { splittedTexts } = await this.splitter.splitText(message);
-        const documents = splittedTexts.map((splittedText) => {
+        const splittedDocs = await this.splitter.splitText(message);
+        const documents = splittedDocs.map((d) => {
             return {
-                pageContent: splittedText[0],
+                pageContent: d.doc,
                 metadata: {
                     id: id,
-                    offset: splittedText[1]
+                    offset: [d.start, d.end]
                 }
             };
         });
@@ -78,14 +77,6 @@ class VectorDB {
             const offset = r.metadata.offset;
             return message.content.substring(offset[0], offset[1]);
         }))
-
-        const testText = `This is a test text|It has multiple sentences##Each sentence should be split into separate chunks>Here is another sentence-
-    And another one\nAnd yet another sentence\n\nAnd a sentence with a period.And a sentence with a question mark?And a sentence with an exclamation mark!`
-        const testChunkSize = 20;
-        const testChunkOverlap = 5;
-        const testseparators = ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"]
-        const { splittedTexts, offsets } = await this.splitText(testText, testChunkSize, testChunkOverlap, testseparators);
-        debugger
 
         return allMessages;
     }
