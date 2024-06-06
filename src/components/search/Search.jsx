@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MaterialSymbolsSearchRounded from "../../icons/MaterialSymbolsSearchRounded.jsx";
+import StreamlineSearch from "../../icons/StreamlineSearch.jsx";
 
 export const Search = ({ searchInitialized }) => {
     const [keywords, setKeywords] = useState('');
@@ -30,30 +30,31 @@ export const Search = ({ searchInitialized }) => {
     };
 
     return (
-        <div class="flex flex-col w-72 h-full border-gray-400 rounded-lg border-2">
+        <div class="flex flex-col w-72 p-4 space-y-4 h-full bg-base-200">
 
             {/* Search input and button */}
-            <div class="flex h-fit w-full p-2">
+            <div class="flex h-fit w-full space-x-2">
                 <input
                     type="text"
-                    className="input input-bordered flex-grow"
+                    className="input input-bordered flex-grow h-10 rounded-lg"
                     value={keywords}
                     onChange={handleInputChange}
                     placeholder="Enter keywords"
                     disabled={loading || !searchInitialized}
                 />
 
-                <div class="flex-fit self-center p-2">
-                    <MaterialSymbolsSearchRounded onClick={handleSearch} class="cursor-pointer" disabled={loading || !searchInitialized} />
-                </div>
+                <button class="flex-fit self-center p-2 h-10 rounded-lg text-token-text-secondary focus-visible:outline-0 hover:bg-base-100 focus-visible:bg-base-100">
+                    {/* TODO: Need to disable search during loading */}
+                    <StreamlineSearch onClick={handleSearch} class="cursor-pointer" disabled={loading || !searchInitialized} />
+                </button>
             </div>
 
             {/* Search results */}
-            <div class="flex flex-grow flex-col w-full p-2 space-y-2 overflow-y-auto">
+            <div class="flex flex-grow flex-col w-full space-y-2 overflow-y-auto">
                 {searchResults.length > 0 && (
                     searchResults.map((result, index) => (
                         // TODO: Display message sender and timestamp
-                        <div key={index} className="card w-full bg-base-100 shadow-xl rounded-lg">
+                        <div key={index} className="card w-full bg-base-100 shadow rounded-lg">
                             <div className="card-body p-2 ">
                                 <p>{truncateText(result, 100)}</p>
                             </div>
