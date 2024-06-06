@@ -23,14 +23,9 @@ async mergeSplits(splits, separator) {
     let offset = 0;
   
     const separatorLength = separator.length > 0 ? separator.reduce((sum, sep) => sum + sep.length, 0) : 0;
-  
-    console.log("separatorLength: ", separatorLength);
-    console.log("splitOnSeparatorList outputs: ", splits);
-    console.log("separator: ", separator);
 
     for (const d of splits) {
       const _len = await this.lengthFunction(d);
-      console.log("total + _len: ", total + _len, " chunksize: ", this.chunkSize);
       if (
         total + _len + (separatorLength > 0 ? (currentDoc.length + 1) * separatorLength : 0) >
         this.chunkSize
@@ -40,10 +35,8 @@ async mergeSplits(splits, separator) {
             `Created a chunk of size ${total}, +   which is longer than the specified ${this.chunkSize}`
           );
         }
-        console.log("current doc  ***** ", currentDoc.length)
         if (currentDoc.length > 0) {
           const doc = separator.length > 0 ? this.joinDocs(currentDoc, separator[0]) : currentDoc.join("");
-          console.log("#######current doc:", doc, offset, offset + doc.length);
           if (doc !== null) {
             docs.push({ doc, start: offset, end: offset + doc.length });
             offset += doc.length + separatorLength;
@@ -59,11 +52,6 @@ async mergeSplits(splits, separator) {
         }
       }
       currentDoc.push(d);
-      console.log("Current Split:", d);
-      console.log("Split Length:", _len);
-      console.log("Total Length:", total);
-      console.log("Current Chunk:", currentDoc);
-      console.log("====>docs", docs)
       total += _len;
     }
     
@@ -71,11 +59,10 @@ async mergeSplits(splits, separator) {
     if (doc !== null) {
       docs.push({ doc, start: offset, end: offset + doc.length });
     }
-    console.log("last doc", doc)
     return docs;
   }
 
-async splitOnSeparatorList(text, separators) {
+  async splitOnSeparatorList(text, separators) {
     let splits = [text];
   
     for (const separator of separators) {
@@ -87,7 +74,17 @@ async splitOnSeparatorList(text, separators) {
               /[/\-\\^$*+?.()|[\]{}]/g,
               "\\$&"
             );
-            newSplits.push(...split.split(new RegExp(`(?=${regexEscapedSeparator})`)));
+            const regex = new RegExp(`(${regexEscapedSeparator})`, 'g');
+            const splitResult = split.split(regex);
+            for (let i = 0; i < splitResult.length; i++) {
+              if (i % 2 === 0) {
+                if (splitResult[i].trim() !== "") {
+                  newSplits.push(splitResult[i]);
+                }
+              } else {
+                newSplits[newSplits.length - 1] += splitResult[i];
+              }
+            }
           } else {
             newSplits.push(...split.split(separator));
           }
@@ -96,13 +93,12 @@ async splitOnSeparatorList(text, separators) {
       }
     }
   
-    return splits.filter((s) => s.trim() !== "");
+    return splits;
   }
 
 async splitText(text) {
     // First we naively split the large input into a bunch of smaller ones.
     const splits = await this.splitOnSeparatorList(text, this.separator);
-    // console.log("splitOnSeparatorList outputs: ", splits);
     return this.mergeSplits(splits, this.keepSeparator ? [] : this.separator);
 }
 }
