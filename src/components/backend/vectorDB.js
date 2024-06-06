@@ -1,5 +1,5 @@
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import {CharacterTextSplitterOffset} from './splitter.js';
 import { v4 as uuidv4 } from 'uuid';
 
 class VectorDB {
@@ -7,10 +7,11 @@ class VectorDB {
     constructor(indexedDB, embedder) {
         this.indexedDB = indexedDB;
         this.embedder = embedder;
-        this.splitSettings = {
-                chunkSize: 1000,
-                chunkOverlap: 200,
-                separators: ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"]};
+        this.splitter = new CharacterTextSplitterOffset({
+            chunkSize: 1000,
+            chunkOverlap: 200,
+            separator: ["|", "##", ">", "-", "\n", "\n\n", ". ", "? ", "! "]
+        });
         this.db = new MemoryVectorStore(this.embedder);
     }
 
@@ -26,53 +27,55 @@ class VectorDB {
         this.db.addVectors(vectors, documents);
     }
 
-    async splitText(text, 
-        chunkSize=this.splitSettings.chunkSize, 
-        chunkOverlap=this.splitSettings.chunkOverlap, 
-        separators = this.splitSettings.separators) {
+    // async splitText(text, 
+    //     chunkSize=this.splitSettings.chunkSize, 
+    //     chunkOverlap=this.splitSettings.chunkOverlap, 
+    //     separators = this.splitSettings.separators) {
 
-        const splittedTexts = [];
-        const offsets = [];
-        let start = 0;
-        let end = chunkSize;
-        while (start < text.length) {
-            if (end > text.length) {
-                end = text.length;
-            }
-            let splittedText = text.substring(start, end);
-            let lastSeparator = separators[0];
-            // find position of last separator in the chunk
-            let lastSeparatorIndex = -1;
-            for (const separator of separators) {
-                const separatorIndex = splittedText.lastIndexOf(separator);
-                if (separatorIndex > lastSeparatorIndex) {
-                    lastSeparatorIndex = separatorIndex;
-                    lastSeparator = separator;
-                }
-            }
-            // if there is a separator in the chunk, split the text at the last separator
-            if (lastSeparatorIndex !== -1) {
-                splittedText = splittedText.substring(0, lastSeparatorIndex + lastSeparator.length);
-                end = start + lastSeparatorIndex + lastSeparator.length;
-            }
-            splittedTexts.push(splittedText);
-            offsets.push([start, end]);
-            start += chunkSize - chunkOverlap;
-            end = start + chunkSize;
-        }
-        return { splittedTexts, offsets };
-    };
+    //     const splittedTexts = [];
+    //     const offsets = [];
+    //     let start = 0;
+    //     let searchEnd = chunkSize*2;
+    //     let end = chunkSize;
+    //     while (start < text.length) {
+    //         if (searchEnd > text.length) {
+    //             searchEnd = text.length;
+    //         }
+    //         let splittedText = text.substring(start, searchEnd);
+    //         let closestSeparator = separators[0];
+    //         // find position of last separator in the chunk
+    //         let closestSeparatorIndex = -1;
+    //         for (const separator of separators) {
+    //             const separatorIndex = splittedText.indexOf(separator);
+    //             if (Math.abs(separatorIndex - end) < Math.abs(closestSeparatorIndex - end)) {
+    //                 closestSeparatorIndex = separatorIndex;
+    //                 closestSeparator = separator;
+    //             }
+    //         }
+    //         // if there is a separator in the chunk, split the text at the last separator
+    //         if (closestSeparatorIndex !== -1) {
+    //             splittedText = splittedText.substring(0, closestSeparatorIndex + closestSeparator.length);
+    //             end = start + closestSeparatorIndex + closestSeparator.length;
+    //         }
+    //         splittedTexts.push(splittedText);
+    //         offsets.push([start, end]);
+    //         start += chunkSize - chunkOverlap;
+    //         end = start + chunkSize;
+    //         searchEnd = end + chunkSize;
+    //     }
+    //     return { splittedTexts, offsets };
+    // };
 
     async addMessage(message, id) {
         // add messsage to vector db in session, and to indexDB for persistence.
-        const { splittedTexts, offsets } = await this.splitText(message, this.splitSettings.chunkSize, 
-                                        this.splitSettings.chunkOverlap, this.splitSettings.separators);
-        const documents = splittedTexts.map((splittedText, index) => {
+        // TODO: offsets are inside the text, need to verify format.
+        const { splittedTexts } = await this.splitter.splitText(message);
+        const documents = splittedTexts.map((splittedText) => {
             return {
-                pageContent: splittedText,
+                pageContent: splittedText[0],
                 metadata: {
                     id: id,
-                    offset: offsets[index]
+                    offset: splittedText[1]
                 }
             };
         });
