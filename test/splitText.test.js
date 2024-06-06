@@ -3,15 +3,13 @@ import VectorDB from '../src/components/backend/vectorDB';
 
 // generate unit test for splitText function in vectorDB.js
 test('vectorDB splitText function test', async () => {
-    const vectorDB = new VectorDB();
+    const vectorDB = new VectorDB(null, null, 20, 5);
     const testText = "This is a test text. It has multiple sentences. Each sentence should be split into separate chunks.";
-    const testChunkSize = 20;
-    const testChunkOverlap = 5;
-    const splittedDocs = await vectorDB.splitter.splitText(testText, testChunkSize, testChunkOverlap);
+    const splittedDocs = await vectorDB.splitter.splitText(testText);
     console.log(splittedDocs);
     const splittedTexts = splittedDocs.map(d => d.doc)
     console.log("splittedTexts in test: ", splittedTexts);
-    const offsets = splittedDocs.map(d => {d.start, d.end})
+    const offsets = splittedDocs.map(d => [d.start, d.end])
     console.log("offsets in test: ", offsets);
     expect(splittedTexts).toEqual([
         "This is a test text.",
