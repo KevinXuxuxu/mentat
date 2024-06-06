@@ -4,12 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 class VectorDB {
 
-    constructor(indexedDB, embedder) {
+    constructor(indexedDB, embedder, chunkSize = 1000, chunkOverlap = 200) {
         this.indexedDB = indexedDB;
         this.embedder = embedder;
         this.splitter = new CharacterTextSplitterOffset({
-            chunkSize: 1000,
-            chunkOverlap: 200,
+            chunkSize: chunkSize,
+            chunkOverlap: chunkOverlap,
             separator: ["|", "##", ">", "-", "\n", "\n\n", ". ", "? ", "! "]
         });
         this.db = new MemoryVectorStore(this.embedder);
