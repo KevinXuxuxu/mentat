@@ -20,6 +20,7 @@ function Mentat() {
   const [provider, setProvider] = useState(null);
   const [model, setModel] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [searchInitialized, setSearchInitialized] = useState(false);
   const chatHistoryRef = useRef(null);
 
   // Handle message sending.
@@ -77,11 +78,6 @@ function Mentat() {
   }
 
   const handleModelConfigSave = () => {
-    window.embedder = new TransformerJsEmbedder('Xenova/bge-base-en-v1.5');
-    window.vectorDB = new VectorDB(window.db, window.embedder);
-    window.vectorDB.constructFromVectors().then(_ => {
-      console.log("vector db initialized");
-    });
     if (window.assistant == null) {
       window.assistant = new Assistant(provider, model, APIKey, window.db);
     } else {
@@ -95,6 +91,15 @@ function Mentat() {
     if (!window.initialized) {
       window.db = IndexedDB;
       window.chatHistory = new History(IndexedDB);
+      window.embedder = new TransformerJsEmbedder('Xenova/bge-base-en-v1.5');
+      window.embedder.pipeline.then(_ => {
+        setSearchInitialized(true);
+        console.log("search initialized");
+      });
+      window.vectorDB = new VectorDB(window.db, window.embedder);
+      window.vectorDB.constructFromVectors().then(_ => {
+        console.log("vector db initialized");
+      });
       window.initialized = true;
     }
     if (chatEnabled) {
@@ -113,7 +118,7 @@ function Mentat() {
 
   return (
     <div className="App flex h-screen w-screen">
-      <Search />
+      <Search searchInitialized={searchInitialized} />
 
       <div class="flex flex-1 w-64 h-full justify-center">
         <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
