@@ -1,4 +1,4 @@
-import {CharacterTextSplitter, CharacterTextSplitterParams} from "langchain/text_splitter";
+import {CharacterTextSplitter} from "langchain/text_splitter";
 
 export class CharacterTextSplitterOffset
   extends CharacterTextSplitter

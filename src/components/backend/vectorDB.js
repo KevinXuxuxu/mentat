@@ -30,6 +30,9 @@ class VectorDB {
     async addMessage(message, id) {
         // add messsage to vector db in session, and to indexDB for persistence.
         const splittedDocs = await this.splitter.splitText(message);
+        // get offsets from splitted docs
+        const offsets = splittedDocs.map((d) => [d.start, d.end]);
+        
         const documents = splittedDocs.map((d) => {
             return {
                 pageContent: d.doc,
@@ -61,14 +64,8 @@ class VectorDB {
         }));
     }
 
-    async search(queryText, threshold=0.6) {
+    async search(queryText) {
         const res = await this.db.similaritySearch(queryText, 6);
-        // const {res, simScores} = await this.db.similaritySearchWithScore(queryText, 6);
-        // if (!res) {
-        //     return [];
-        // }
-        // // remove results below threshold and preserve the order
-        // const res = res.filter((r, index) => simScores[index] > threshold);
 
         // get the chunk of message that relates to the query text
         const allMessages = await Promise.all(res.map(async (r) => {
