@@ -15,6 +15,7 @@ export const Search = ({ searchInitialized }) => {
             setLoading(true);
             const results = await window.vectorDB.search(keywords);
             setSearchResults(results);
+            console.log('search results:', results);
         } catch (error) {
             console.error('Error searching:', error);
         } finally {
@@ -39,12 +40,17 @@ export const Search = ({ searchInitialized }) => {
                     className="input input-bordered flex-grow"
                     value={keywords}
                     onChange={handleInputChange}
+                    onKeyPress={(event) => {
+                        if (event.key === 'Enter') {handleSearch()}
+                    }}
                     placeholder="Enter keywords"
                     disabled={loading || !searchInitialized}
                 />
 
                 <div className="flex-fit self-center p-2">
-                    <MaterialSymbolsSearchRounded onClick={handleSearch} className="cursor-pointer" disabled={loading || !searchInitialized} />
+                    <MaterialSymbolsSearchRounded 
+                    onClick={handleSearch} 
+                    className="cursor-pointer" disabled={loading || !searchInitialized} />
                 </div>
             </div>
 

@@ -69,8 +69,6 @@ class VectorDB {
         // remove results below threshold
         const filteredRes = res.filter((r) => r[1] > threshold);
 
-        console.log("Filtered results: ", filteredRes);
-
         // get the chunk of message that relates to the query text
         const allMessages = await Promise.all(filteredRes.map(async (r) => {
             const id = r[0].metadata.id;
