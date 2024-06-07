@@ -30,10 +30,10 @@ export const Search = ({ searchInitialized }) => {
     };
 
     return (
-        <div class="flex flex-col w-72 h-full border-gray-400 rounded-lg border-2">
+        <div className="flex flex-col w-72 h-full border-gray-400 rounded-lg border-2">
 
             {/* Search input and button */}
-            <div class="flex h-fit w-full p-2">
+            <div className="flex h-fit w-full p-2">
                 <input
                     type="text"
                     className="input input-bordered flex-grow"
@@ -43,13 +43,13 @@ export const Search = ({ searchInitialized }) => {
                     disabled={loading || !searchInitialized}
                 />
 
-                <div class="flex-fit self-center p-2">
-                    <MaterialSymbolsSearchRounded onClick={handleSearch} class="cursor-pointer" disabled={loading || !searchInitialized} />
+                <div className="flex-fit self-center p-2">
+                    <MaterialSymbolsSearchRounded onClick={handleSearch} className="cursor-pointer" disabled={loading || !searchInitialized} />
                 </div>
             </div>
 
             {/* Search results */}
-            <div class="flex flex-grow flex-col w-full p-2 space-y-2 overflow-y-auto">
+            <div className="flex flex-grow flex-col w-full p-2 space-y-2 overflow-y-auto">
                 {searchResults.length > 0 && (
                     searchResults.map((result, index) => (
                         // TODO: Display message sender and timestamp

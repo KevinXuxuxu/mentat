@@ -120,12 +120,12 @@ function Mentat() {
     <div className="App flex h-screen w-screen">
       <Search searchInitialized={searchInitialized} />
 
-      <div class="flex flex-1 w-64 h-full justify-center">
-        <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
+      <div className="flex flex-1 w-64 h-full justify-center">
+        <div className="flex flex-col h-full w-2/3 max-w-2xl justify-between">
           {renderChatHistory()}
           <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
-        <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
+        <button className="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
       </div>
 
       <ModelConfig provider={provider} handleProviderChange={handleProviderChange} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
