@@ -64,14 +64,18 @@ class VectorDB {
         }));
     }
 
-    async search(queryText) {
-        const res = await this.db.similaritySearch(queryText, 6);
+    async search(queryText, threshold=0.6) {
+        const res = await this.db.similaritySearchWithScore(queryText, 6);
+        // remove results below threshold and preserve the order
+        const filteredRes = res.filter((r) => r[1] > threshold);
+
+        console.log("Filtered results: ", filteredRes);
 
         // get the chunk of message that relates to the query text
-        const allMessages = await Promise.all(res.map(async (r) => {
-            const id = r.metadata.id;
+        const allMessages = await Promise.all(filteredRes.map(async (r) => {
+            const id = r[0].metadata.id;
             const message = await this.indexedDB.object('history').get(id);
-            const offset = r.metadata.offset;
+            const offset = r[0].metadata.offset;
             return message.content.substring(offset[0], offset[1]);
         }))
 
