@@ -66,7 +66,7 @@ class VectorDB {
 
     async search(queryText, threshold=0.6) {
         const res = await this.db.similaritySearchWithScore(queryText, 6);
-        // remove results below threshold and preserve the order
+        // remove results below threshold
         const filteredRes = res.filter((r) => r[1] > threshold);
 
         console.log("Filtered results: ", filteredRes);
