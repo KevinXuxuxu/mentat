@@ -52,3 +52,16 @@ test("vectorDB splitText function test with other separators", async () => {
     [235, 275],
   ]);
 });
+
+// test text with empty separators in splitText function
+test("vectorDB splitText function test with empty separators", async () => {
+  const vectorDB = new VectorDB(null, null, 20, 5, []);
+  const testText = `This is a test textIt has multiple sentencesEach sentence should be split into separate chunksHere is another sentence    And another oneAnd yet another sentenceAnd a sentence with a periodAnd a sentence with a question markAnd a sentence with an exclamation mark`;
+  const splittedDocs = await vectorDB.splitter.splitText(testText);
+  const splittedTexts = splittedDocs.map((d) => d.doc);
+  const offsets = splittedDocs.map((d) => [d.start, d.end]);
+  expect(splittedTexts).toEqual([
+    "This is a test textIt has multiple sentencesEach sentence should be split into separate chunksHere is another sentence    And another oneAnd yet another sentenceAnd a sentence with a periodAnd a sentence with a question markAnd a sentence with an exclamation mark",
+  ]);
+  expect(offsets).toEqual([[0, 263]]);
+});

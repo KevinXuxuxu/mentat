@@ -13,7 +13,7 @@ export class CharacterTextSplitterOffset extends CharacterTextSplitter {
     this.separators = fields?.separators ?? this.separators;
   }
 
-  async mergeSplits(splits, separator) {
+  async mergeSplits(splits, separators) {
     const docs = [];
     const currentDoc = [];
     let total = 0;
