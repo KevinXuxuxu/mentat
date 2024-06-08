@@ -65,3 +65,21 @@ test("vectorDB splitText function test with empty separators", async () => {
   ]);
   expect(offsets).toEqual([[0, 263]]);
 });
+
+// test text with a large chunkSize in splitText function
+test("vectorDB splitText function test with large chunk size", async () => {
+  const largeChunkSize = 100;
+  const vectorDB = new VectorDB(null, null, largeChunkSize, 5);
+  const  testText =
+  "This is a test text. It has multiple sentences. Each sentence should be split into separate chunks. Except if the chunkSize is large enough, then the entire text should be in one chunk.";
+  const splittedDocs = await vectorDB.splitter.splitText(testText);
+  const splittedTexts = splittedDocs.map((d) => d.doc);
+  const offsets = splittedDocs.map((d) => [d.start, d.end]);
+  expect(splittedTexts).toEqual([
+    'This is a test text. It has multiple sentences. Each sentence should be split into separate chunks.',
+  ' Except if the chunkSize is large enough, then the entire text should be in one chunk.'
+]);
+  expect(offsets).toEqual([ [0, 99],
+    [99, 185]]);
+});
+
