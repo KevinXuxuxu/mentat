@@ -3,7 +3,13 @@ import { CharacterTextSplitterOffset } from "./splitter.js";
 import { v4 as uuidv4 } from "uuid";
 
 class VectorDB {
-  constructor(indexedDB, embedder, chunkSize = 1000, chunkOverlap = 200, separators=["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"]) {
+  constructor(
+    indexedDB,
+    embedder,
+    chunkSize = 1000,
+    chunkOverlap = 200,
+    separators = ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"],
+  ) {
     this.indexedDB = indexedDB;
     this.embedder = embedder;
     this.splitter = new CharacterTextSplitterOffset({

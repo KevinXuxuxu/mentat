@@ -70,19 +70,20 @@ test("vectorDB splitText function test with empty separators", async () => {
 test("vectorDB splitText function test with large chunk size", async () => {
   const largeChunkSize = 100;
   const vectorDB = new VectorDB(null, null, largeChunkSize, 5);
-  const  testText =
-  "This is a test text. It has multiple sentences. Each sentence should be split into separate chunks. Except if the chunkSize is large enough, then the entire text should be in one chunk.";
+  const testText =
+    "This is a test text. It has multiple sentences. Each sentence should be split into separate chunks. Except if the chunkSize is large enough, then the entire text should be in one chunk.";
   const splittedDocs = await vectorDB.splitter.splitText(testText);
   const splittedTexts = splittedDocs.map((d) => d.doc);
   const offsets = splittedDocs.map((d) => [d.start, d.end]);
   expect(splittedTexts).toEqual([
-    'This is a test text. It has multiple sentences. Each sentence should be split into separate chunks.',
-  ' Except if the chunkSize is large enough, then the entire text should be in one chunk.'
-]);
-  expect(offsets).toEqual([ [0, 99],
-    [99, 185]]);
+    "This is a test text. It has multiple sentences. Each sentence should be split into separate chunks.",
+    " Except if the chunkSize is large enough, then the entire text should be in one chunk.",
+  ]);
+  expect(offsets).toEqual([
+    [0, 99],
+    [99, 185],
+  ]);
 });
-
 
 // test text with a large chunk overlap in splitText function
 test("vectorDB splitText function test with large chunk overlap", async () => {
@@ -92,23 +93,25 @@ test("vectorDB splitText function test with large chunk overlap", async () => {
   const splittedTexts = splittedDocs.map((d) => d.doc);
   const offsets = splittedDocs.map((d) => [d.start, d.end]);
   expect(splittedTexts).toEqual([
-    'Hi. How are you. This is a test text.',
-    ' This is a test text. It has multiple sentences.',
+    "Hi. How are you. This is a test text.",
+    " This is a test text. It has multiple sentences.",
     " It has multiple sentences. That's right.",
-    ' Each sentence should be split into separate chunks.',
-    ' You hear me? This is a test text. You hear me?',
-    ' You hear me? It does have multiple sentences.',
-    ' You hear? If the chunkSize is large enough.',
-    ' You hear?',
-    ' Then the entire text should be in one chunk.'
+    " Each sentence should be split into separate chunks.",
+    " You hear me? This is a test text. You hear me?",
+    " You hear me? It does have multiple sentences.",
+    " You hear? If the chunkSize is large enough.",
+    " You hear?",
+    " Then the entire text should be in one chunk.",
   ]);
-  expect(offsets).toEqual([  [ 0, 37 ],
-    [ 37, 85 ],
-    [ 85, 126 ],
-    [ 126, 178 ],
-    [ 178, 225 ],
-    [ 225, 271 ],
-    [ 271, 315 ],
-    [ 315, 325 ],
-    [ 325, 370 ]]);
+  expect(offsets).toEqual([
+    [0, 37],
+    [37, 85],
+    [85, 126],
+    [126, 178],
+    [178, 225],
+    [225, 271],
+    [271, 315],
+    [315, 325],
+    [325, 370],
+  ]);
 });
