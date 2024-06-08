@@ -44,7 +44,6 @@ export const Search = ({ searchInitialized }) => {
                 />
 
                 <button class="flex-fit self-center p-2 h-10 rounded-lg text-token-text-secondary focus-visible:outline-0 hover:bg-base-100 focus-visible:bg-base-100">
-                    {/* TODO: Need to disable search during loading */}
                     <StreamlineSearch onClick={handleSearch} class="cursor-pointer" disabled={loading || !searchInitialized} />
                 </button>
             </div>
