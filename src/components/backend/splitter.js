@@ -5,12 +5,12 @@ export class CharacterTextSplitterOffset extends CharacterTextSplitter {
     return "CharacterTextSplitterOffset";
   }
 
-  separator = "\n\n";
+  separators = "\n\n";
   keepSeparator = true;
 
   constructor(fields) {
     super(fields);
-    this.separator = fields?.separator ?? this.separator;
+    this.separators = fields?.separators ?? this.separators;
   }
 
   async mergeSplits(splits, separator) {
@@ -20,8 +20,8 @@ export class CharacterTextSplitterOffset extends CharacterTextSplitter {
     let offset = 0;
 
     const separatorLength =
-      separator.length > 0
-        ? separator.reduce((sum, sep) => sum + sep.length, 0)
+      separators.length > 0
+        ? separators.reduce((sum, sep) => sum + sep.length, 0)
         : 0;
 
     for (const d of splits) {
@@ -41,8 +41,8 @@ export class CharacterTextSplitterOffset extends CharacterTextSplitter {
         }
         if (currentDoc.length > 0) {
           const doc =
-            separator.length > 0
-              ? this.joinDocs(currentDoc, separator[0])
+            separators.length > 0
+              ? this.joinDocs(currentDoc, separators[0])
               : currentDoc.join("");
           if (doc !== null) {
             docs.push({ doc, start: offset, end: offset + doc.length });
@@ -64,7 +64,7 @@ export class CharacterTextSplitterOffset extends CharacterTextSplitter {
 
     const doc =
       separatorLength > 0
-        ? this.joinDocs(currentDoc, separator[0])
+        ? this.joinDocs(currentDoc, separators[0])
         : currentDoc.join("");
     if (doc !== null) {
       docs.push({ doc, start: offset, end: offset + doc.length });
@@ -108,7 +108,7 @@ export class CharacterTextSplitterOffset extends CharacterTextSplitter {
 
   async splitText(text) {
     // First we naively split the large input into a bunch of smaller ones.
-    const splits = await this.splitOnSeparatorList(text, this.separator);
-    return this.mergeSplits(splits, this.keepSeparator ? [] : this.separator);
+    const splits = await this.splitOnSeparatorList(text, this.separators);
+    return this.mergeSplits(splits, this.keepSeparator ? [] : this.separators);
   }
 }

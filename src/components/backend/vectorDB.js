@@ -9,7 +9,7 @@ class VectorDB {
     this.splitter = new CharacterTextSplitterOffset({
       chunkSize: chunkSize,
       chunkOverlap: chunkOverlap,
-      separator: ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"],
+      separators: ["|", "##", ">", "-", "\n", "\n\n", ".", "?", "!"],
     });
     this.db = new MemoryVectorStore(this.embedder);
   }
