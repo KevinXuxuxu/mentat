@@ -1,48 +1,29 @@
-import {CharacterTextSplitter} from "langchain/text_splitter";
+import { CharacterTextSplitter } from "langchain/text_splitter";
 
-export class CharacterTextSplitterOffset
-  extends CharacterTextSplitter
-{
-    static lc_name() {
-        return "CharacterTextSplitterOffset";
-    }
+export class CharacterTextSplitterOffset extends CharacterTextSplitter {
+  static lc_name() {
+    return "CharacterTextSplitterOffset";
+  }
 
-<<<<<<< HEAD
-  separators = "\n\n";
-  keepSeparator = true;
-=======
-separator = "\n\n";
+separators = "\n\n";
 keepSeparator = true;
->>>>>>> parent of e19eb4d (prettier)
 
 constructor(fields) {
     super(fields);
-<<<<<<< HEAD
     this.separators = fields?.separators ?? this.separators;
-  }
-
-  async mergeSplits(splits, separators) {
-=======
-    this.separator = fields?.separator ?? this.separator;
 }
 
 
-async mergeSplits(splits, separator) {
->>>>>>> parent of e19eb4d (prettier)
+async mergeSplits(splits, separators) {
     const docs = [];
     const currentDoc = [];
     let total = 0;
     let offset = 0;
-<<<<<<< HEAD
 
     const separatorLength =
       separators.length > 0
         ? separators.reduce((sum, sep) => sum + sep.length, 0)
         : 0;
-=======
-  
-    const separatorLength = separator.length > 0 ? separator.reduce((sum, sep) => sum + sep.length, 0) : 0;
->>>>>>> parent of e19eb4d (prettier)
 
     for (const d of splits) {
       const _len = await this.lengthFunction(d);
@@ -56,14 +37,7 @@ async mergeSplits(splits, separator) {
           );
         }
         if (currentDoc.length > 0) {
-<<<<<<< HEAD
-          const doc =
-            separators.length > 0
-              ? this.joinDocs(currentDoc, separators[0])
-              : currentDoc.join("");
-=======
-          const doc = separator.length > 0 ? this.joinDocs(currentDoc, separator[0]) : currentDoc.join("");
->>>>>>> parent of e19eb4d (prettier)
+          const doc = separators.length > 0 ? this.joinDocs(currentDoc, separators[0]) : currentDoc.join("");
           if (doc !== null) {
             docs.push({ doc, start: offset, end: offset + doc.length });
             offset += doc.length + separatorLength;
@@ -78,19 +52,12 @@ async mergeSplits(splits, separator) {
           }
         }
       }
+      // iterate to next doc in splits
       currentDoc.push(d);
       total += _len;
     }
-<<<<<<< HEAD
-
-    const doc =
-      separatorLength > 0
-        ? this.joinDocs(currentDoc, separators[0])
-        : currentDoc.join("");
-=======
     
-    const doc = separatorLength > 0 ? this.joinDocs(currentDoc, separator[0]) : currentDoc.join("");
->>>>>>> parent of e19eb4d (prettier)
+    const doc = separatorLength > 0 ? this.joinDocs(currentDoc, separators[0]) : currentDoc.join("");
     if (doc !== null) {
       docs.push({ doc, start: offset, end: offset + doc.length });
     }
@@ -133,13 +100,7 @@ async mergeSplits(splits, separator) {
 
 async splitText(text) {
     // First we naively split the large input into a bunch of smaller ones.
-<<<<<<< HEAD
     const splits = await this.splitOnSeparatorList(text, this.separators);
     return this.mergeSplits(splits, this.keepSeparator ? [] : this.separators);
   }
-=======
-    const splits = await this.splitOnSeparatorList(text, this.separator);
-    return this.mergeSplits(splits, this.keepSeparator ? [] : this.separator);
->>>>>>> parent of e19eb4d (prettier)
-}
 }
