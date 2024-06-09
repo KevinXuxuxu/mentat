@@ -4,10 +4,11 @@ import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 import airbnbConfig from "eslint-config-airbnb";
 import eslintConfigPrettier from "eslint-config-prettier";
 
+
 export default [
-  { languageOptions: { globals: globals.browser } },
+  {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
   pluginReactConfig,
   airbnbConfig,
-  eslintConfigPrettier,
+  eslintConfigPrettier
 ];
