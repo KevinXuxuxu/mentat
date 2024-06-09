@@ -11,6 +11,8 @@ import { TransformerJsEmbedder } from './components/backend/embedding.js';
 import { Search } from "./components/search/Search.jsx";
 import { Alert } from "./components/alert/Alert.jsx";
 import { AppendChild } from "./components/utils.js";
+import StreamlineSetting from "./icons/StreamlineSetting.jsx";
+import { Export } from "./components/export/Export.jsx";
 
 function Mentat() {
   const [chatEnabled, setChatEnabled] = useState(false);
@@ -121,11 +123,16 @@ function Mentat() {
       <Search searchInitialized={searchInitialized} />
 
       <div class="flex flex-1 w-64 h-full justify-center">
+        <Export />
+
         <div class="flex flex-col h-full w-2/3 max-w-2xl justify-between">
           {renderChatHistory()}
           <Input chatEnabled={chatEnabled} message={message} handleKeyPress={handleKeyPress} handleInputChange={handleInputChange} handleSendMessage={handleSendMessage} />
         </div>
-        <button class="btn m-2 float-right absolute top-0 right-0" onClick={() => document.getElementById('model_config').showModal()}>Model</button>
+        <button class="float-right absolute top-0 right-0 h-10 rounded-lg m-4 px-2 text-token-text-secondary focus-visible:outline-0 hover:bg-base-200 focus-visible:bg-base-200">
+          <StreamlineSetting onClick={() => document.getElementById('model_config').showModal()} />
+        </button>
+
       </div>
 
       <ModelConfig provider={provider} handleProviderChange={handleProviderChange} handleModelChange={handleModelChange} APIKey={APIKey} handleAPIKeyChange={handleAPIKeyChange} handleModelConfigSave={handleModelConfigSave} />
