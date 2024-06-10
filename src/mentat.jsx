@@ -13,17 +13,22 @@ import { Alert } from "./components/alert/Alert.jsx";
 import { AppendChild } from "./components/utils.js";
 import StreamlineSetting from "./icons/StreamlineSetting.jsx";
 import { Export } from "./components/export/Export.jsx";
+import { useLocalStorage } from "./components/hooks/useLocalStorage";
 
 function Mentat() {
-  const [chatEnabled, setChatEnabled] = useState(false);
   const [message, setMessage] = useState('');
   const [messageObjs, setMessageObjs] = useState([]);
-  const [APIKey, setAPIKey] = useState('');
   const [provider, setProvider] = useState(null);
+  const [APIKey, setAPIKey] = useState('');
   const [model, setModel] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searchInitialized, setSearchInitialized] = useState(false);
   const chatHistoryRef = useRef(null);
+
+  const [savedProvider, setSavedProvider] = useLocalStorage(`mentat-provider`, '');
+  const [savedKey, setSavedKey] = useLocalStorage(`${savedProvider ?? 'default'}-key`, '');
+  const [savedModel, setSavedModel] = useLocalStorage(`${savedProvider ?? 'default'}-model`, null);
+  const chatEnabled = !loading && !!provider && !!model && APIKey !== '';
 
   // Handle message sending.
   const handleInputChange = (event) => {
@@ -53,30 +58,36 @@ function Mentat() {
       AppendChild(chatHistoryRef.current, <Alert content={error.message} />);
     }
     setLoading(false);
-    setChatEnabled(true);
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && chatEnabled) {
       setLoading(true);
-      setChatEnabled(false);
       handleSendMessage();
     }
   };
 
   // Handle model config.
   const handleProviderChange = (event) => {
-    setProvider(event.target.value);
-    setModel(providerModels[event.target.value][0]);
+    const newProvider = event.target.value;
+    setProvider(newProvider);
+    setSavedProvider(newProvider);
+    const defaultModel = providerModels[event.target.value][0];
+    setModel(defaultModel);
+    setSavedModel(defaultModel);
     setAPIKey('');
   }
 
   const handleModelChange = (event) => {
-    setModel(event.target.value);
+    const newModel = event.target.value;
+    setModel(newModel);
+    setSavedModel(newModel);
   }
 
   const handleAPIKeyChange = (event) => {
-    setAPIKey(event.target.value);
+    const newKey = event.target.value;
+    setAPIKey(newKey);
+    setSavedKey(newKey);
   }
 
   const handleModelConfigSave = () => {
@@ -85,7 +96,6 @@ function Mentat() {
     } else {
       window.assistant.replaceModel(provider, model, APIKey);
     }
-    setChatEnabled(true);
   }
 
   // Initialization.
@@ -108,6 +118,30 @@ function Mentat() {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
     }
   }, [chatEnabled, messageObjs])
+
+  useEffect(() => {
+    if (APIKey === '' && savedKey !== '') {
+      setAPIKey(savedKey);
+    }
+  }, [APIKey, savedKey]);
+
+  useEffect(() => {
+    if (model == null && savedModel != null) {
+      setModel(savedModel);
+    }
+  }, [model, savedModel]);
+
+  useEffect(() => {
+    if (provider == null && savedProvider != null) {
+      setProvider(savedProvider);
+    }
+  }, [provider, savedProvider]);
+
+  useEffect(() => {
+    if (chatEnabled && window.assistant == null) {
+      window.assistant = new Assistant(provider, model, APIKey, window.db);
+    }
+  }, [provider, model, APIKey]);
 
   const renderChatHistory = () => {
     return (
