@@ -30,10 +30,10 @@ export const Search = ({ searchInitialized }) => {
     };
 
     return (
-        <div class="flex flex-col w-72 p-4 space-y-4 h-full bg-base-200">
+        <div className="flex flex-col w-72 p-4 space-y-4 h-full bg-base-200">
 
             {/* Search input and button */}
-            <div class="flex h-fit w-full space-x-2">
+            <div className="flex h-fit w-full space-x-2">
                 <input
                     type="text"
                     className="input input-bordered flex-grow h-10 rounded-lg"
@@ -43,13 +43,13 @@ export const Search = ({ searchInitialized }) => {
                     disabled={loading || !searchInitialized}
                 />
 
-                <button class="flex-fit self-center p-2 h-10 rounded-lg text-token-text-secondary focus-visible:outline-0 hover:bg-base-100 focus-visible:bg-base-100">
-                    <StreamlineSearch onClick={handleSearch} class="cursor-pointer" disabled={loading || !searchInitialized} />
+                <button className="flex-fit self-center p-2 h-10 rounded-lg text-token-text-secondary focus-visible:outline-0 hover:bg-base-100 focus-visible:bg-base-100">
+                    <StreamlineSearch onClick={handleSearch} className="cursor-pointer" disabled={loading || !searchInitialized} />
                 </button>
             </div>
 
             {/* Search results */}
-            <div class="flex flex-grow flex-col w-full space-y-2 overflow-y-auto">
+            <div className="flex flex-grow flex-col w-full space-y-2 overflow-y-auto">
                 {searchResults.length > 0 && (
                     searchResults.map((result, index) => (
                         // TODO: Display message sender and timestamp
