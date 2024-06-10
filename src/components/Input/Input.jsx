@@ -26,10 +26,10 @@ export const Input = ({ chatEnabled, message, handleKeyPress, handleInputChange,
     return (
         <div class="flex h-20 w-full">
             {chatEnabled ? (
-                <div class="flex-grow self-center">
+                <div className="flex-grow self-center relative">
                     <textarea
                         placeholder="Type here"
-                        className="input input-bordered w-full"
+                        className="input input-bordered w-full resize-none"
                         value={message}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
