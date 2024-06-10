@@ -39,6 +39,9 @@ export const Search = ({ searchInitialized }) => {
                     className="input input-bordered flex-grow h-10 rounded-lg"
                     value={keywords}
                     onChange={handleInputChange}
+                    onKeyPress={(event) => {
+                        if (event.key === 'Enter') {handleSearch()}
+                    }}
                     placeholder="Enter keywords"
                     disabled={loading || !searchInitialized}
                 />
