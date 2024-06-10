@@ -3,7 +3,7 @@ import { providerModels } from "../backend/assistant";
 const renderSelectModel = (provider, handleModelChange) => {
     if (provider == null) {
         return (
-            <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
+            <select className="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
                 <option disabled>Model</option>
             </select>
         );
@@ -11,7 +11,7 @@ const renderSelectModel = (provider, handleModelChange) => {
     const firstModel = providerModels[provider].models[0];
     const otherModels = providerModels[provider].models.slice(1);
     return (
-        <select class="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
+        <select className="select select-bordered w-full max-w-xs m-2" defaultValue="Model" onChange={handleModelChange}>
             <option disabled>Model</option>
             <option key={firstModel} selected>{firstModel}</option>
             {otherModels.map((m) => (<option key={m}>{m}</option>))}
